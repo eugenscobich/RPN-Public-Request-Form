@@ -9,14 +9,32 @@
         http://www.springframework.org/schema/mvc 
         http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
-	<context:component-scan base-package="ru.rpn" />
+	<bean id="validatorJSR303" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
-	<mvc:annotation-driven />
+	<mvc:annotation-driven/>
+	
+	<bean id="portletMultipartResolver" class="org.springframework.web.portlet.multipart.CommonsPortletMultipartResolver">
+	 	<property name="maxUploadSize" value="10000000"/>
+	</bean>
+	
+<!-- 
+	<bean id="annotationMethodHandlerAdapter" class="org.springframework.web.portlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="webBindingInitializer">
+	        <bean id="configurableWebBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+	            <property name="validator">
+	                <ref bean="validatorJSR303"/>
+	            </property>
+	        </bean>
+	    </property>
+	</bean>
+	 -->
+	<context:component-scan base-package="ru.rpn.publicrequestform.controller" />
+	
 
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
 		<property name="prefix" value="/WEB-INF/jsp/main/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-	
+
 </beans>

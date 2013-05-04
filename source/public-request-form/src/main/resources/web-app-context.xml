@@ -8,10 +8,24 @@
         				http://www.springframework.org/schema/tx
            				http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
 
+
+
+	<tx:annotation-driven/>
 	<context:annotation-config />
 	<bean class="ru.rpn.publicrequestform.util.spring.LiferayDatabaseContextConfig" />
 
 	<context:component-scan base-package="ru.rpn.publicrequestform" />
+
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="database" value="${jdbc.jpa.database}" />
+		<property name="showSql" value="${jdbc.jpa.show.sql}" />
+	</bean>
 
 	<bean id="applicationPropertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
@@ -21,32 +35,11 @@
 			</list>
 		</property>
 	</bean>
-
-
-	<tx:annotation-driven/>
-
-	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+	
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="classpath:messages" />
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="annotatedPackages">
-			<list>
-				<value>ru.rpn.publicrequestform.model</value>
-			</list>
-		</property>
-		
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.show_sql">${jdbc.jpa.show.sql}</prop>
-				<prop key="hibernate.dialect">${jdbc.jpa.dialect}</prop>
-				<prop key="hibernate.connection.charSet">UTF-8</prop>
-			</props>
-		</property>
-	</bean>
+	
 </beans>
