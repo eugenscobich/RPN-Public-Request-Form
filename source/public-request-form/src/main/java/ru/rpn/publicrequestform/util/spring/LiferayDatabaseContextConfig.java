@@ -20,7 +20,8 @@ public class LiferayDatabaseContextConfig {
 	LocalContainerEntityManagerFactoryBean entityManagerFactory() throws SQLException {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setJpaVendorAdapter(jpaAdapter);
-		//entityManagerFactoryBean.setPersistenceUnitName("requestFormPersistenceUnit");
+		entityManagerFactoryBean.setPersistenceUnitName("requestFormPersistenceUnit");
+		entityManagerFactoryBean.setPersistenceXmlLocation("classpath:/META-INF/spring-persistence.xml");
 		entityManagerFactoryBean.setDataSource(InfrastructureUtil.getDataSource());
 		return entityManagerFactoryBean;
 	}

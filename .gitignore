@@ -2,3 +2,8 @@
 *.project
 */target*/
 */.settings*/
+source/public-request-form/.settings/*
+source/public-request-form/target/*
+source/public-request-form/target/**
+source/public-request-form/target/**
+source/public-request-form/target/classes/**

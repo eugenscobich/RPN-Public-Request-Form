@@ -14,10 +14,10 @@
 	<mvc:annotation-driven/>
 	
 	<bean id="portletMultipartResolver" class="org.springframework.web.portlet.multipart.CommonsPortletMultipartResolver">
-	 	<property name="maxUploadSize" value="10000000"/>
+
 	</bean>
 	
-<!-- 
+
 	<bean id="annotationMethodHandlerAdapter" class="org.springframework.web.portlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="webBindingInitializer">
 	        <bean id="configurableWebBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
@@ -27,7 +27,7 @@
 	        </bean>
 	    </property>
 	</bean>
-	 -->
+
 	<context:component-scan base-package="ru.rpn.publicrequestform.controller" />
 	
 

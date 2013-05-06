@@ -19,7 +19,10 @@ public class Attachment implements Serializable {
 	private Long id;
 	
 	@Column
-	private String entryFileId;
+	private String fileName;
+	
+	@Column
+	private Long entryFileId;
 
 	public Long getId() {
 		return id;
@@ -29,12 +32,20 @@ public class Attachment implements Serializable {
 		this.id = id;
 	}
 
-	public String getEntryFileId() {
+	public long getEntryFileId() {
 		return entryFileId;
 	}
 
-	public void setEntryFileId(String entryFileId) {
+	public void setEntryFileId(Long entryFileId) {
 		this.entryFileId = entryFileId;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 		
 	

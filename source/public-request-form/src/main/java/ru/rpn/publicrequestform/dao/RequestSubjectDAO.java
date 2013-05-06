@@ -11,7 +11,7 @@ public class RequestSubjectDAO extends BaseDAO<RequestSubject> {
 
 	@SuppressWarnings("unchecked")
 	public RequestSubject get(String requestSubject) {
-		Query query = entityManager.createQuery("from " + RequestSubject.class.getName() + " rs where rs.name = :name");
+		Query query = getEntityManager().createQuery("from " + RequestSubject.class.getName() + " rs where rs.name = :name");
 		query.setParameter("name", requestSubject);
 		return getSingleResult(query.getResultList());
 	}

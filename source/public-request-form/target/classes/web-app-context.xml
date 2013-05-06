@@ -9,10 +9,9 @@
            				http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
 
 
-
-	<tx:annotation-driven/>
 	<context:annotation-config />
 	<bean class="ru.rpn.publicrequestform.util.spring.LiferayDatabaseContextConfig" />
+
 
 	<context:component-scan base-package="ru.rpn.publicrequestform" />
 
@@ -22,6 +21,8 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
+	<tx:annotation-driven />
+	
 	<bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 		<property name="database" value="${jdbc.jpa.database}" />
 		<property name="showSql" value="${jdbc.jpa.show.sql}" />

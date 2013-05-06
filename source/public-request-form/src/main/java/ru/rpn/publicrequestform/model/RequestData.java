@@ -2,8 +2,10 @@ package ru.rpn.publicrequestform.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,10 +15,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.br.TituloEleitoral;
 import org.springframework.web.multipart.MultipartFile;
 
 @Entity
@@ -29,6 +35,10 @@ public class RequestData implements Serializable {
 	@GeneratedValue
 	private Long id;
 
+	@Column
+	@Temporal(TemporalType.DATE)
+	private Date date;
+	
 	@Column
 	@NotEmpty
 	private String firstName;
@@ -57,7 +67,7 @@ public class RequestData implements Serializable {
 	@NotEmpty
 	private String message;
 	
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER, cascade={CascadeType.ALL})
 	@JoinColumn(name="request_data_id")
 	private List<Attachment> attachments;
 	
@@ -150,6 +160,14 @@ public class RequestData implements Serializable {
 
 	public void setMultipartFiles(List<MultipartFile> multipartFiles) {
 		this.multipartFiles = multipartFiles;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 }

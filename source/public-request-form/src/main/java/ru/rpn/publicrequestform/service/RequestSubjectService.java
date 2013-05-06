@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ru.rpn.publicrequestform.dao.RequestSubjectDAO;
 import ru.rpn.publicrequestform.model.RequestSubject;
+import ru.rpn.publicrequestform.util.spring.PostInitialize;
 
 @Service
 public class RequestSubjectService {
@@ -32,8 +33,9 @@ public class RequestSubjectService {
 		return requestSubjectDAO.getAll();
 	}
 	
-	@PostConstruct
-	private void init() {
+	@PostInitialize
+	@Transactional
+	public void init() {
 		String[] requestSubjects = initialRequestSubject.split(";");
 		boolean check = true;
 		int i = 1;
@@ -45,7 +47,7 @@ public class RequestSubjectService {
 			RequestSubject rs = new RequestSubject();
 			rs.setIndex(String.format("%02d", i));
 			rs.setName(requestSubject);
-			requestSubjectDAO.persist(rs);
+			save(rs);
 			i++;
 		}
 	}

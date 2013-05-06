@@ -10,26 +10,26 @@ import javax.persistence.PersistenceContext;
 public class BaseDAO <K extends Serializable> {
 	
 	@PersistenceContext
-	public EntityManager entityManager;
+	private EntityManager entityManager;
 
 	public void persist(K entity) {
-		entityManager.persist(entity);
+		getEntityManager().persist(entity);
 	}
 
 	public K merge(K entity) {
-		return entityManager.merge(entity);
+		return getEntityManager().merge(entity);
 	}
 
 	public K find(Long id) {
-		return entityManager.find(getEntityClazz(), id);
+		return getEntityManager().find(getEntityClazz(), id);
 	}
 
 	public List<K> getAll() {
-		return entityManager.createQuery("from " + getEntityClazz().getName(), getEntityClazz()).getResultList();
+		return getEntityManager().createQuery("from " + getEntityClazz().getName(), getEntityClazz()).getResultList();
 	}
 
 	public void remove(K entity) {
-		entityManager.remove(entity);
+		getEntityManager().remove(entity);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -43,5 +43,13 @@ public class BaseDAO <K extends Serializable> {
 			return entities.get(0);
 		}
 		return null;
+	}
+
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
+
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
 	}
 }
