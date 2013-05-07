@@ -2,12 +2,15 @@ package ru.rpn.publicrequestform.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,9 +23,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 
-import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.hibernate.validator.constraints.br.TituloEleitoral;
 import org.springframework.web.multipart.MultipartFile;
 
 @Entity
@@ -62,10 +63,24 @@ public class RequestData implements Serializable {
 	
 	@ManyToOne
 	private RequestSubject requestSubject;
+
+	@ManyToOne
+	private Status status;
+	
+	@Column
+	@Temporal(TemporalType.DATE)
+	private Date changeStatusDate;
+	
+	@ManyToOne
+	private Department department;
 	
 	@Column
 	@NotEmpty
 	private String message;
+	
+	@Column
+	@Enumerated(EnumType.STRING)
+	private ResponseStatus responseStatus;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade={CascadeType.ALL})
 	@JoinColumn(name="request_data_id")
@@ -169,5 +184,52 @@ public class RequestData implements Serializable {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	public Date getChangeStatusDate() {
+		return changeStatusDate;
+	}
+
+	public void setChangeStatusDate(Date changeStatusDate) {
+		this.changeStatusDate = changeStatusDate;
+	}
+
+	public ResponseStatus getResponseStatus() {
+		return responseStatus;
+	}
+
+	public void setResponseStatus(ResponseStatus responseStatus) {
+		this.responseStatus = responseStatus;
+	}
+
+	public String getCode() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(getDate());
+		return getRequestSubject().getIndex() + "-" + Integer.toString(calendar.get(Calendar.YEAR)).substring(2) + "/" + getId();
+	}
+	
+	public String getStripMessage() {
+		if (message.length() > 50) {
+			return message.substring(0, 50) + "...";
+		} else {
+			return message;
+		}
+	}
+
 
 }

@@ -9,7 +9,7 @@
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 		<init-param>
 			<name>contextConfigLocation</name>
-			<value>classpath:public-request-form-context.xml</value>
+			<value>classpath:main-context.xml</value>
 		</init-param>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -17,4 +17,20 @@
 		</supports>
 		<resource-bundle>messages</resource-bundle>
 	</portlet>
+	
+	<portlet>
+		<portlet-name>PublicRequestFormAdminisrtation</portlet-name>
+		<display-name>Public Request Form Administration</display-name>
+		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>classpath:administration-context.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>VIEW</portlet-mode>
+		</supports>
+		<resource-bundle>messages</resource-bundle>
+	</portlet>
+	
 </portlet-app>

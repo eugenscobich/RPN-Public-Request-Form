@@ -1,27 +1,28 @@
 package ru.rpn.publicrequestform.service;
 
-import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.MimeTypesUtil;
-import com.liferay.portal.service.ServiceContext;
-
 import ru.rpn.publicrequestform.dao.RequestDataDAO;
 import ru.rpn.publicrequestform.model.Attachment;
 import ru.rpn.publicrequestform.model.RequestData;
+import ru.rpn.publicrequestform.model.RequestSubject;
+import ru.rpn.publicrequestform.model.ResponseStatus;
 import ru.rpn.publicrequestform.model.TemplateType;
 
 @Service
 public class RequestDataService {
+	
+	@Value("${default.status}")
+	private String defaultStatus;
 	
 	@Autowired
 	private RequestDataDAO requestDataDAO;
@@ -37,23 +38,38 @@ public class RequestDataService {
 	
 	@Autowired
 	private MessageSource messageSource;
+
+	@Autowired
+	private StatusService statusService;
 	
 	@Transactional
 	public void save(RequestData requestData, long companyId) throws Exception {
-		requestData.setDate(new Date());
+		Date now = new Date();
+		requestData.setDate(now);
+		requestData.setStatus(statusService.get(defaultStatus));
+		requestData.setResponseStatus(ResponseStatus.NO);
+		requestData.setChangeStatusDate(now);
 		requestDataDAO.persist(requestData);
 		List<Attachment> attachments = liferayService.addFiles(requestData, companyId);
 		requestData.setAttachments(attachments);
 		requestDataDAO.merge(requestData);
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(requestData.getDate());
-		String requestNumber = requestData.getRequestSubject().getIndex() + "-" + Integer.toString(calendar.get(Calendar.YEAR)).substring(2) + "/" + requestData.getId();
 		VelocityContext velocityContext = new VelocityContext();
-		velocityContext.put("requestNumber", requestNumber);
+		velocityContext.put("requestNumber", requestData.getCode());
 		String content = templateService.getTemplateContent(TemplateType.SUBMIT, velocityContext);
-		String subject = messageSource.getMessage("template.subject." + TemplateType.SUBMIT.name(), new String[]{requestNumber}, null);
+		String subject = messageSource.getMessage("template.subject." + TemplateType.SUBMIT.name(), new String[]{requestData.getCode()}, null);
 		mailService.sendMail(requestData.getEmail(), subject, content, null);
-		
 	}
+	
+
+	@Transactional(readOnly = true)
+	public List<RequestData> getAll() {
+		return requestDataDAO.getAll();
+	}
+
+	@Transactional(readOnly = true)
+	public RequestData get(Long id) {
+		return requestDataDAO.find(id);
+	}
+	
 	
 }

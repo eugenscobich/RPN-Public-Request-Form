@@ -1,13 +1,12 @@
 package ru.rpn.publicrequestform.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.monitor.FileEntry;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,8 +16,6 @@ import ru.rpn.publicrequestform.model.RequestData;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
@@ -112,7 +109,7 @@ public class LiferayService {
 		}
 		DLFileEntry fileEntry = DLFileEntryLocalServiceUtil.addFileEntry(
 			getUserId(companyId), groupId, parentFolderId, fileName, fileName, fileName, StringPool.BLANK,
-			StringPool.BLANK, inputStream, bytes.length, new ServiceContext());
+			StringPool.BLANK, new ByteArrayInputStream(bytes), bytes.length, new ServiceContext());
 		return fileEntry.getFileEntryId();
 	}
 	

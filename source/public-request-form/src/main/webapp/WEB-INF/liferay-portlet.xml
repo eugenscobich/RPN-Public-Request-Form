@@ -4,8 +4,13 @@
 <liferay-portlet-app>
 	<portlet>
 		<portlet-name>PublicRequestForm</portlet-name>
-		<control-panel-entry-category>server</control-panel-entry-category>
-		<control-panel-entry-weight>1.1</control-panel-entry-weight>
+		<header-portlet-css>/css/style.css</header-portlet-css>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>PublicRequestFormAdminisrtation</portlet-name>
+		<control-panel-entry-category>portal</control-panel-entry-category>
+		<control-panel-entry-weight>0.1</control-panel-entry-weight>
 		<header-portlet-css>/css/style.css</header-portlet-css>
 	</portlet>
 </liferay-portlet-app>

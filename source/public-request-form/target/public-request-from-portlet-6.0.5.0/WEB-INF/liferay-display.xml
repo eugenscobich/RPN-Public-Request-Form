@@ -4,5 +4,6 @@
 <display>
 	<category name="RPN">
 		<portlet id="PublicRequestForm"></portlet>
+		<portlet id="PublicRequestFormAdminisrtation"></portlet>
 	</category>
 </display>

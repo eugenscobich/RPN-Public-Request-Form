@@ -1,12 +1,6 @@
 package ru.rpn.publicrequestform.util.spring;
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.stereotype.Component;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -14,7 +8,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import static java.util.concurrent.TimeUnit.NANOSECONDS;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
 
 /**
  * ContextRefresh listener that invokes methods, annotated with {@link PostInitialize} in the given {@link PostInitialize#order()}. Those methods can't have parameteres.  
