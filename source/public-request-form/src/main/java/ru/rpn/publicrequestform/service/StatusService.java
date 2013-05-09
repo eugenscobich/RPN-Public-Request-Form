@@ -63,4 +63,8 @@ public class StatusService {
 			}
 		}
 	}
+
+	public List<Status> getAllActive() {
+		return statusDAO.getAllActive();
+	}
 }

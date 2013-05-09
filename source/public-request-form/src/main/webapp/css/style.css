@@ -18,20 +18,20 @@
 	font-weight: bold;
 }
 
-.public-request-form-administration form {
+.public-request-form-administration {
 	overflow: hidden;
 }
 
-.public-request-form-administration form .title {
+.public-request-form-administration .title {
 	float: left;
 	width: 150px;
 	font-weight: bold;
 	padding: 4px;
 }
 
-.public-request-form-administration form .content {
+.public-request-form-administration .content {
 	padding: 4px;
-	padding-left: 150px;
+	padding-left: 160px;
 }
 
 .public-request-form-administration .icon  {
@@ -48,3 +48,14 @@
 	background: url("../img/delete.png") no-repeat;
 }
 
+.public-request-form-administration .bottom-dotted {
+	border-bottom: dashed 1px;
+}
+
+.public-request-form-administration .response .title {
+	line-height: 28px;
+}
+
+.public-request-form-administration .response textarea {
+	width: 100%;
+}

@@ -1,5 +1,7 @@
 package ru.rpn.publicrequestform.dao;
 
+import java.util.List;
+
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
@@ -14,5 +16,11 @@ public class StatusDAO extends BaseDAO<Status> {
 		Query query = getEntityManager().createQuery("from " + Status.class.getName() + " s where s.name = :name");
 		query.setParameter("name", name);
 		return getSingleResult(query.getResultList());
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Status> getAllActive() {
+		Query query = getEntityManager().createQuery("from " + Status.class.getName() + " s where s.isEnabled = true");
+		return query.getResultList();
 	}
 }

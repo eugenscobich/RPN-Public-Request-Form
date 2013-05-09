@@ -86,6 +86,9 @@ public class RequestData implements Serializable {
 	@JoinColumn(name="request_data_id")
 	private List<Attachment> attachments;
 	
+	@Column
+	private String responseMessage;
+	
 	@Transient
 	private List<MultipartFile> multipartFiles = new ArrayList<MultipartFile>() ;
 	
@@ -229,6 +232,14 @@ public class RequestData implements Serializable {
 		} else {
 			return message;
 		}
+	}
+
+	public String getResponseMessage() {
+		return responseMessage;
+	}
+
+	public void setResponseMessage(String responseMessage) {
+		this.responseMessage = responseMessage;
 	}
 
 

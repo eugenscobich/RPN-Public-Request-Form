@@ -9,7 +9,7 @@
 <div class="public-request-form-administration">
 	<c:choose>
 		<c:when test="${not empty success}">
-			<div class="portlet-msg-success"><spring:message code="success-send-request"/></div>
+			<div class="portlet-msg-success"><spring:message code="${success}"/></div>
 		</c:when>
 		<c:when test="${not empty errors}">
 			<div class="portlet-msg-error"><spring:message code="${errors}"/></div>
@@ -44,19 +44,25 @@
 					<td><c:out value="${requestData.status.name}"/></td>
 					<td><spring:message code="ResponseStatus.${requestData.responseStatus}"/></td>
 					<td>
-						<portlet:actionURL var="deleteRequestData">
+						<portlet:actionURL var="deleteRequestData" name="deleteRequestData">
 							<portlet:param name="id" value="${requestData.id}"/>
 						</portlet:actionURL>
 						
 						
 						<span><a href="${editRequestData}" class="icon icon-edit"></a></span>
-						<span><a href="${deleteRequestData}" class="icon icon-delete"></a></span>
+						<span><a href="${deleteRequestData}" class="icon icon-delete" onclick="confirmDeleteRequest(this); return false;"></a></span>
 						
 					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-	
+	<script>
+		function confirmDeleteRequest(a) {
+			if(confirm('<spring:message code="Confirm-Delete-Request"/>?')) {
+				window.location = a.href;
+			} 
+		}
+	</script>
 
 </div>

@@ -112,5 +112,12 @@ public class LiferayService {
 			StringPool.BLANK, new ByteArrayInputStream(bytes), bytes.length, new ServiceContext());
 		return fileEntry.getFileEntryId();
 	}
+
+	public void deleteFiles(RequestData requestData, long companyId) throws Exception {
+		initiatePermissionCheckerIfNotStarted(companyId);
+		long groupId = CompanyLocalServiceUtil.getCompany(companyId).getGroup().getGroupId();
+		long parentFolderId = getFolderId(requestData, companyId, groupId);
+		DLFolderLocalServiceUtil.deleteFolder(parentFolderId);
+	}
 	
 }

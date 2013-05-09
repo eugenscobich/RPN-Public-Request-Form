@@ -18,7 +18,6 @@
 		</c:when>
 	</c:choose>
 	
-	
 	<form:form action="${sendAction}" method="post" modelAttribute="requestData" enctype="multipart/form-data">
 		<div class="title">
 			<form:label path="firstName"><spring:message code="First-Name"/> *</form:label>

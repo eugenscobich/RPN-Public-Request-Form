@@ -36,4 +36,9 @@ public class DepartmentService {
 			}
 		}
 	}
+	
+	@Transactional
+	public List<Department> getAllActive() {
+		return departmentDAO.getAllActive();
+	}
 }
