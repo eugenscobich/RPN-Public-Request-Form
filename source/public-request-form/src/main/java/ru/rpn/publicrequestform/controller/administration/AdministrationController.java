@@ -1,6 +1,8 @@
 package ru.rpn.publicrequestform.controller.administration;
 
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -20,12 +22,14 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import ru.rpn.publicrequestform.model.Department;
 import ru.rpn.publicrequestform.model.RequestData;
+import ru.rpn.publicrequestform.model.RequestSubject;
 import ru.rpn.publicrequestform.model.ResponseStatus;
 import ru.rpn.publicrequestform.model.Status;
 import ru.rpn.publicrequestform.service.DepartmentService;
 import ru.rpn.publicrequestform.service.RequestDataService;
 import ru.rpn.publicrequestform.service.RequestSubjectService;
 import ru.rpn.publicrequestform.service.StatusService;
+import ru.rpn.publicrequestform.util.bind.CustomDepartmentPropertyEditor;
 import ru.rpn.publicrequestform.util.bind.CustomStatusPropertyEditor;
 
 import com.liferay.portal.util.PortalUtil;
@@ -51,26 +55,62 @@ public class AdministrationController {
 	@Autowired
 	private CustomStatusPropertyEditor customStatusPropertyEditor;
 	
+	@Autowired
+	private CustomDepartmentPropertyEditor customDepartmentPropertyEditor;
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Status.class, customStatusPropertyEditor);
+		binder.registerCustomEditor(Department.class, customDepartmentPropertyEditor);
 	}
 	
 	@RenderMapping
 	public String view(RenderRequest request, RenderResponse response, Model model) {
-		model.addAttribute("requestDatas", requestDataService.getAll());
+		Set<RequestData> requestDatas = new TreeSet<RequestData>(requestDataService.getAll());
+		Set<Status> statuses = new TreeSet<Status>(statusService.getAllActive());
+		for (RequestData requestData : requestDatas) {
+			if (requestData.getStatus() != null) {
+				statuses.add(requestData.getStatus());
+			}	
+		}
+		List<RequestSubject> requestSubjects = requestSubjectService.getAll();
+		model.addAttribute("requestSubjects", requestSubjects);
+		model.addAttribute("statuses", statuses);
+		model.addAttribute("requestDatas", requestDatas);
+		Status receivedStatus = statusService.getReceivedStatus();
+		model.addAttribute("receivedStatus", receivedStatus);
 		return "view";
 	}
 	
 	@RenderMapping(params="view=editRequestData")
 	public String editRequestData(RenderRequest request, RenderResponse response, Model model, @RequestParam("id") Long id) {
-		List<Status> statuses = statusService.getAllActive();
-		List<Department> departments = departmentService.getAllActive();
+		Set<Status> statuses = new TreeSet<Status>(statusService.getAllActive());
+		Set<Department> departments = new TreeSet<Department>(departmentService.getAllActive());
 		RequestData requestData = requestDataService.get(id);
+		if (requestData.getStatus() != null) {
+			statuses.add(requestData.getStatus());
+		}
+		if (requestData.getDepartment() != null) {
+			departments.add(requestData.getDepartment());
+		}
 		model.addAttribute("requestData", requestData);
 		model.addAttribute("departments", departments);
 		model.addAttribute("statuses", statuses);
 		return "edit";
+	}
+	
+	@RenderMapping(params="view=editStatuses")
+	public String editStatuses(RenderRequest request, RenderResponse response, Model model) {
+		List<Status> statuses = statusService.getAllActive();
+		model.addAttribute("statuses", statuses);
+		return "edit-statuses";
+	}
+	
+	@RenderMapping(params="view=editDepartments")
+	public String editDepartment(RenderRequest request, RenderResponse response, Model model) {
+		List<Department> departments = departmentService.getAllActive();
+		model.addAttribute("departments", departments);
+		return "edit-department";
 	}
 	
 	@ActionMapping("changeStatus")
@@ -119,6 +159,74 @@ public class AdministrationController {
 			model.addAttribute("errors", "errors-delete");
 		}
 		
+	}
+	
+	@ActionMapping("removeStatus")
+	public void removeStatus(ActionRequest request, ActionResponse response, Model model, @RequestParam("status") Long statusId, @RequestParam("id") Long id) {
+		statusService.remove(statusId);
+		model.addAttribute("success", "success-delete");
+		response.setRenderParameter("id", id.toString());
+		response.setRenderParameter("view", "editStatuses");
+	}
+	
+	@ActionMapping("addStatus")
+	public void addStatus(ActionRequest request, ActionResponse response, Model model, @RequestParam("status") String statusName, @RequestParam("id") Long id) {
+		statusService.add(statusName);
+		model.addAttribute("success", "success-add");
+		response.setRenderParameter("id", id.toString());
+		response.setRenderParameter("view", "editStatuses");
+	}
+	
+	@ActionMapping("removeDepartment")
+	public void removeDepartment(ActionRequest request, ActionResponse response, Model model, @RequestParam("department") Long departmentId, @RequestParam("id") Long id) {
+		departmentService.remove(departmentId);
+		model.addAttribute("success", "success-delete");
+		response.setRenderParameter("id", id.toString());
+		response.setRenderParameter("view", "editDepartments");
+	}
+	
+	@ActionMapping("addDepartment")
+	public void addDepartment(ActionRequest request, ActionResponse response, Model model, @RequestParam("department") String departmentName, @RequestParam("id") Long id) {
+		departmentService.add(departmentName);
+		model.addAttribute("success", "success-add");
+		response.setRenderParameter("id", id.toString());
+		response.setRenderParameter("view", "editDepartments");
+	}
+
+	@ActionMapping("filter")
+	public void filter(ActionRequest request, ActionResponse response, Model model, @RequestParam("requestSubject") Long requestSubjectId,
+			@RequestParam("status") Long statusId, @RequestParam("d1") Integer d1, 
+			@RequestParam("m1") Integer m1, @RequestParam("y1") Integer y1, @RequestParam(value = "dateEnabled", required = false) Boolean dateEnabled) throws Exception {
+		Set<RequestData> requestDatas = new TreeSet<RequestData>(requestDataService.getAll(requestSubjectId, statusId, dateEnabled, d1, m1, y1));
+		model.addAttribute("requestDatas", requestDatas);
+		response.setRenderParameter("view", "filtered");
+	}
+	
+	
+	@ActionMapping("search")
+	public void search(ActionRequest request, ActionResponse response, Model model, @RequestParam("firstName") String firstName) throws Exception {
+		Set<RequestData> requestDatas = new TreeSet<RequestData>(requestDataService.getAll(firstName));
+		model.addAttribute("requestDatas", requestDatas);
+		response.setRenderParameter("view", "filtered");
+	}
+	
+	@RenderMapping(params="view=filtered")
+	public String filtered(RenderRequest request, RenderResponse response, Model model) {
+		@SuppressWarnings("unchecked")
+		Set<RequestData> requestDatas = (Set<RequestData>) model.asMap().get("requestDatas");
+		Set<Status> statuses = new TreeSet<Status>(statusService.getAllActive());
+		for (RequestData requestData : requestDatas) {
+			if (requestData.getStatus() != null) {
+				statuses.add(requestData.getStatus());
+			}	
+		}
+		List<RequestSubject> requestSubjects = requestSubjectService.getAll();
+		model.addAttribute("requestSubjects", requestSubjects);
+		model.addAttribute("statuses", statuses);
+		model.addAttribute("requestDatas", requestDatas);
+		Status receivedStatus = statusService.getReceivedStatus();
+		model.addAttribute("receivedStatus", receivedStatus);
+		return "view";
 	}
 	
 }

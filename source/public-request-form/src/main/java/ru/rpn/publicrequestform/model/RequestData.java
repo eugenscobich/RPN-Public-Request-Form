@@ -22,13 +22,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "prf_request_data")
-public class RequestData implements Serializable {
+public class RequestData implements Serializable, Comparable<RequestData> {
 
 	private static final long serialVersionUID = 6414415710291607896L;
 
@@ -42,23 +44,29 @@ public class RequestData implements Serializable {
 	
 	@Column
 	@NotEmpty
+	@Size(max = 250)
 	private String firstName;
 	
 	@Column
+	@Size(max = 250)
 	private String lastName;
 	
 	@Column
+	@Size(max = 250)
 	private String middleName;
 	
 	@Column
 	@NotEmpty
+	@Size(max = 250)
 	private String address;
 	
 	@Column
 	@Pattern(regexp="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
+	@Size(max = 250)
 	private String email;
 	
 	@Column
+	@Size(max = 250)
 	private String phone;
 	
 	@ManyToOne
@@ -76,6 +84,7 @@ public class RequestData implements Serializable {
 	
 	@Column
 	@NotEmpty
+	@Type(type="text")
 	private String message;
 	
 	@Column
@@ -87,6 +96,7 @@ public class RequestData implements Serializable {
 	private List<Attachment> attachments;
 	
 	@Column
+	@Type(type="text")
 	private String responseMessage;
 	
 	@Transient
@@ -242,5 +252,44 @@ public class RequestData implements Serializable {
 		this.responseMessage = responseMessage;
 	}
 
+	@Override
+	public int compareTo(RequestData o) {
+		if (date.after(o.getDate())) {
+			return -1;
+		} else if (date.before(o.getDate())){
+			return 1;
+		} else {
+			if (id > o.getId()) {
+				return -1;
+			} else {
+				return 1;
+			}
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RequestData other = (RequestData) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 
 }

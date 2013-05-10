@@ -23,7 +23,7 @@
 			<form:label path="firstName"><spring:message code="First-Name"/> *</form:label>
 		</div>
 		<div class="content">
-			<form:input path="firstName"/><form:errors path="firstName" cssClass="error"/>
+			<form:input path="firstName" cssClass="input"/><form:errors path="firstName" cssClass="error"/>
 		</div>
 		
 		
@@ -31,73 +31,73 @@
 			<form:label path="lastName"><spring:message code="Last-Name"/></form:label>
 		</div>
 		<div class="content">
-			<form:input path="lastName"/><form:errors path="lastName" cssClass="error"/>
+			<form:input path="lastName" cssClass="input"/><form:errors path="lastName" cssClass="error"/>
 		</div>
 		
 		<div class="title">
 			<form:label path="middleName"><spring:message code="Middle-Name"/></form:label>
 		</div>
 		<div class="content">
-			<form:input path="middleName"/><form:errors path="middleName" cssClass="error"/>
+			<form:input path="middleName" cssClass="input"/><form:errors path="middleName" cssClass="error"/>
 		</div>
 		
 		<div class="title">
 			<form:label path="address"><spring:message code="Address"/> *</form:label>
 		</div>
 		<div class="content">
-			<form:input path="address"/><form:errors path="address" cssClass="error"/>
+			<form:input path="address" cssClass="input"/><form:errors path="address" cssClass="error"/>
 		</div>
 		
 		<div class="title">
 			<form:label path="email"><spring:message code="Email"/> *</form:label>
 		</div>
 		<div class="content">
-			<form:input path="email"/><form:errors path="email" cssClass="error"/>
+			<form:input path="email" cssClass="input"/><form:errors path="email" cssClass="error"/>
 		</div>
 		
 		<div class="title">
 			<form:label path="phone"><spring:message code="Phone"/></form:label>
 		</div>
 		<div class="content">
-			<form:input path="phone"/><form:errors path="phone" cssClass="error"/>
+			<form:input path="phone" cssClass="input"/><form:errors path="phone" cssClass="error"/>
 		</div>
 		
 		<div class="title">
 			<form:label path="requestSubject"><spring:message code="Request-Subject"/></form:label>
 		</div>
 		<div class="content">
-			<form:select path="requestSubject">
+			<form:select path="requestSubject" cssClass="input">
 				<form:options items="${requestSubjects}" itemLabel="label"/>
 			</form:select>
 			<form:errors path="requestSubject"  cssClass="error"/>
 		</div>
 		
 		<div class="title">
-			<form:label path="message"><spring:message code="Message"/> *</form:label>
+			<form:label path="message"><spring:message code="Text-Message"/> *</form:label>
 		</div>
 		<div class="content">
-			<form:textarea path="message"/><form:errors path="message" cssClass="error"/>
+			<form:textarea path="message" cssClass="input"/><form:errors path="message" cssClass="error"/>
 		</div>
 		
 		<div class="title">
 			<label><spring:message code="Attachment"/></label>
 		</div>
 		<div class="content">
-			<input name="multipartFiles[0]" type="file"/>
+			<input name="multipartFiles[0]" type="file" class="input"/>
 		</div>
 		
 		<div class="title">
 			<label><spring:message code="Attachment"/></label>
 		</div>
 		<div class="content">
-			<input name="multipartFiles[1]" type="file" >
+			<input name="multipartFiles[1]" type="file" class="input"/>
 		</div>
 		
 		<div class="title">
 			<label><spring:message code="Attachment"/></label>
 		</div>
 		<div class="content">
-			<input name="multipartFiles[2]" type="file"/>
+			<input name="multipartFiles[2]" type="file" class="input"/>
 		</div>
 		
 		<div><liferay-ui:captcha url="<%= captchaURL %>" /> </div>

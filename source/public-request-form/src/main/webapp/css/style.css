@@ -2,6 +2,19 @@
 	color: red;
 }
 
+.public-request-form label {
+	font-weight: bold;
+	padding-top: 4px;
+}
+
+.public-request-form .input {
+	width: 400px;
+}
+
+.public-request-form textarea.input{
+	height: 200px;
+}
+
 .public-request-form-administration table {
 	border-right: 1px solid black;
 	border-top: 1px solid black;
@@ -30,8 +43,8 @@
 }
 
 .public-request-form-administration .content {
-	padding: 4px;
-	padding-left: 160px;
+	overflow: hidden;
+    padding: 4px 4px 4px 0;
 }
 
 .public-request-form-administration .icon  {
@@ -50,12 +63,40 @@
 
 .public-request-form-administration .bottom-dotted {
 	border-bottom: dashed 1px;
+	overflow: hidden;
+	margin-bottom: 6px;
 }
 
 .public-request-form-administration .response .title {
 	line-height: 28px;
 }
 
+.public-request-form-administration .response form {
+	line-height: 28px;
+}
+
+.public-request-form-administration .response button {
+	float: right;
+}
+
 .public-request-form-administration .response textarea {
 	width: 100%;
 }
+
+.public-request-form-administration tr.selected td {
+	background-color: #FDBFBF;
+}
+
+.public-request-form-administration th {
+	background-color: #C0C0C0;
+}
+
+.public-request-form-administration .checkbox {
+	float: left;
+	width: 16px;
+}
+
+.public-request-form-administration .group {
+	overflow: hidden;
+}
+

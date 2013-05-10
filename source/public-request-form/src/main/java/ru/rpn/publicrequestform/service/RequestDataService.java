@@ -1,11 +1,11 @@
 package ru.rpn.publicrequestform.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +21,7 @@ import ru.rpn.publicrequestform.model.TemplateType;
 @Service
 public class RequestDataService {
 	
-	@Value("${default.status}")
-	private String defaultStatus;
+
 	
 	@Autowired
 	private RequestDataDAO requestDataDAO;
@@ -49,7 +48,7 @@ public class RequestDataService {
 	public void save(RequestData requestData, long companyId) throws Exception {
 		Date now = new Date();
 		requestData.setDate(now);
-		requestData.setStatus(statusService.get(defaultStatus));
+		requestData.setStatus(statusService.getReceivedStatus());
 		requestData.setResponseStatus(ResponseStatus.NO);
 		requestData.setChangeStatusDate(now);
 		requestDataDAO.persist(requestData);
@@ -110,5 +109,27 @@ public class RequestDataService {
 		Department department = departmentService.get(departmentId);
 		requestData.setDepartment(department);
 		requestDataDAO.merge(requestData);
+	}
+
+	@Transactional
+	public List<RequestData> getAll(Long requestSubjectId, Long statusId, Boolean dateEnabled, Integer day, Integer month, Integer year) {
+		Date date = null;
+		if (dateEnabled != null && dateEnabled) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.YEAR, year);
+			calendar.set(Calendar.DAY_OF_MONTH, day);
+			calendar.set(Calendar.MONTH, month);
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			date = calendar.getTime();
+		}
+		return requestDataDAO.getAll(requestSubjectId, statusId, date);
+	}
+
+
+	public List<RequestData> getAll(String firstName) {
+		return requestDataDAO.getAll(firstName);
 	}
 }

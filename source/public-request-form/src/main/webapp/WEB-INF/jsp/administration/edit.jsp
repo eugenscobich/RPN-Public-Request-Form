@@ -21,10 +21,20 @@
 <portlet:actionURL name="changeDepartament" var="changeDepartament"/>
 <portlet:actionURL name="changeResponceStatus" var="changeResponceStatus"/>
 <portlet:renderURL var="back"/>
+<portlet:renderURL var="editDepartment" >
+	<portlet:param name="view" value="editDepartments"></portlet:param>
+	<portlet:param name="id" value="${requestData.id}"></portlet:param>
+</portlet:renderURL>
+<portlet:renderURL var="editStatuses" >
+	<portlet:param name="view" value="editStatuses"></portlet:param>
+	<portlet:param name="id" value="${requestData.id}"></portlet:param>
+</portlet:renderURL>
 
 <div class="public-request-form-administration">
 	<div>
 		<span><a href="${back}">&lt;&lt;<spring:message code="Back"/></a></span>
+		<span><a href="${editStatuses}"> <spring:message code="Edit-Statuses"/></a></span>
+		<span><a href="${editDepartment}"> <spring:message code="Edit-Departments"/></a></span>
 	</div>
 	<c:choose>
 		<c:when test="${not empty success}">
@@ -35,7 +45,7 @@
 		</c:when>
 	</c:choose>
 	
-	<div>
+	<div class="group">
 		<div class="title">
 			<label><spring:message code="Date"/>:</label>
 		</div>
@@ -43,7 +53,7 @@
 			<span><fmt:formatDate value="${requestData.date}" pattern="dd.MM.yyyy"/></span>
 		</div>
 	</div>
-	<div>
+	<div class="group">
 		<div class="title">
 			<label><spring:message code="First-Name"/>:</label>
 		</div>
@@ -51,7 +61,7 @@
 			<span><c:out value="${requestData.firstName}"/></span>
 		</div>
 	</div>
-	<div>
+	<div class="group">
 		<div class="title">
 			<label><spring:message code="Last-Name"/>:</label>
 		</div>
@@ -59,7 +69,7 @@
 			<span><c:out value="${requestData.lastName}"/></span>
 		</div>
 	</div>
-	<div>
+	<div class="group">
 		<div class="title">
 			<label><spring:message code="Middle-Name"/>:</label>
 		</div>
@@ -67,7 +77,7 @@
 			<span><c:out value="${requestData.middleName}"/></span>
 		</div>
 	</div>
-	<div>
+	<div class="group">
 		<div class="title">
 			<label><spring:message code="Address"/>:</label>
 		</div>
@@ -75,7 +85,7 @@
 			<span><c:out value="${requestData.address}"/></span>
 		</div>
 	</div>
-	<div>
+	<div class="group">
 		<div class="title">
 			<label><spring:message code="Email"/>:</label>
 		</div>
@@ -83,7 +93,7 @@
 			<span><c:out value="${requestData.email}"/></span>
 		</div>
 	</div>
-	<div>
+	<div class="group">
 		<div class="title">
 			<label><spring:message code="Phone"/>:</label>
 		</div>
@@ -91,15 +101,15 @@
 			<span><c:out value="${requestData.phone}"/></span>
 		</div>
 	</div>
-	<div>
+	<div class="group">
 		<div class="title">
 			<label><spring:message code="Request-Subject"/>:</label>
 		</div>
 		<div class="content">
-			<span><c:out value="${requestData.requestSubject.name}"/></span>
+			<span><c:out value="${requestData.requestSubject.label}"/></span>
 		</div>
 	</div>
-	<div>
+	<div class="group">
 		<div class="title">
 			<label><spring:message code="Text-Message"/>:</label>
 		</div>
@@ -143,7 +153,14 @@
 			</div>
 		</div>
 	
-		
+		<div>
+			<div class="title" style="line-height: normal;">
+				<label><spring:message code="Change-Date"/>:</label>
+			</div>
+			<div class="content">
+				<span><fmt:formatDate value="${requestData.changeStatusDate}" pattern="dd.MM.yyyy"/></span>
+			</div>
+		</div>
 		
 		<div>
 			<div class="title">

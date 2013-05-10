@@ -41,4 +41,19 @@ public class DepartmentService {
 	public List<Department> getAllActive() {
 		return departmentDAO.getAllActive();
 	}
+
+	@Transactional
+	public void remove(Long departmentId) {
+		Department department = get(departmentId);
+		department.setIsEnabled(Boolean.FALSE);
+		departmentDAO.merge(department);
+	}
+
+	@Transactional
+	public void add(String departmentName) {
+		Department department = new Department();
+		department.setIsEnabled(Boolean.TRUE);
+		department.setName(departmentName);
+		save(department);
+	}
 }

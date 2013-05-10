@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "prf_status")
-public class Status  implements Serializable {
+public class Status  implements Serializable, Comparable<Status> {
 	
 	private static final long serialVersionUID = -4935435727026529412L;
 
@@ -71,6 +71,17 @@ public class Status  implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(Status o) {
+		if (id > o.getId()) {
+			return 1;
+		} else if (id < o.getId()){
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 
 }

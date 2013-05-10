@@ -20,6 +20,8 @@ public class StatusService {
 	@Value("${initial.statuses}")
 	private String initialSatuses;
 	
+	@Value("${default.status}")
+	private String defaultStatus;
 	
 	@Transactional(readOnly = true)
 	public Status get(long id) {
@@ -66,5 +68,25 @@ public class StatusService {
 
 	public List<Status> getAllActive() {
 		return statusDAO.getAllActive();
+	}
+	
+	@Transactional
+	public void remove(Long statusId) {
+		Status status = get(statusId);
+		status.setIsEnabled(Boolean.FALSE);
+		statusDAO.merge(status);
+	}
+
+	@Transactional
+	public void add(String statusName) {
+		Status s = new Status();
+		s.setIsEnabled(Boolean.TRUE);
+		s.setName(statusName);
+		save(s);
+	}
+	
+	@Transactional
+	public Status getReceivedStatus() {
+		return get(defaultStatus);
 	}
 }
