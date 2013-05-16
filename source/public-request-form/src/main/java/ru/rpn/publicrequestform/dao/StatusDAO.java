@@ -23,4 +23,16 @@ public class StatusDAO extends BaseDAO<Status> {
 		Query query = getEntityManager().createQuery("from " + Status.class.getName() + " s where s.isEnabled = true");
 		return query.getResultList();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Status> getAllSystemStatuses() {
+		Query query = getEntityManager().createQuery("from " + Status.class.getName() + " s where s.isSystem = true");
+		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Status> getAllActiveNotSystemStatuses() {
+		Query query = getEntityManager().createQuery("from " + Status.class.getName() + " s where s.isEnabled = true and s.isSystem = false");
+		return query.getResultList();
+	}
 }

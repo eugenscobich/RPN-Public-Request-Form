@@ -101,7 +101,9 @@ public class AdministrationController {
 	
 	@RenderMapping(params="view=editStatuses")
 	public String editStatuses(RenderRequest request, RenderResponse response, Model model) {
-		List<Status> statuses = statusService.getAllActive();
+		List<Status> systemStatuses = statusService.getAllSystemStatuses();
+		List<Status> statuses = statusService.getAllActiveNotSystemStatuses();
+		model.addAttribute("systemStatuses", systemStatuses);
 		model.addAttribute("statuses", statuses);
 		return "edit-statuses";
 	}
@@ -170,8 +172,12 @@ public class AdministrationController {
 	}
 	
 	@ActionMapping("addStatus")
-	public void addStatus(ActionRequest request, ActionResponse response, Model model, @RequestParam("status") String statusName, @RequestParam("id") Long id) {
-		statusService.add(statusName);
+	public void addStatus(ActionRequest request, ActionResponse response, Model model, 
+			@RequestParam("status") String statusName,
+			@RequestParam(value = "needDate", required = false) Boolean needDate,
+			@RequestParam(value = "needAddtionalInformation", required = false) Boolean needAddtionalInformation,
+			@RequestParam("id") Long id) {
+		statusService.add(statusName, needDate != null ? needDate : Boolean.FALSE, needAddtionalInformation != null ? needAddtionalInformation : Boolean.FALSE);
 		model.addAttribute("success", "success-add");
 		response.setRenderParameter("id", id.toString());
 		response.setRenderParameter("view", "editStatuses");

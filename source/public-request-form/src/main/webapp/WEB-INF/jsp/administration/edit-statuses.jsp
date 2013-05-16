@@ -40,7 +40,16 @@
 		</c:when>
 	</c:choose>
 	<div class="response">
-		<div>
+		<div class="title" style="line-height: normal;">
+			<label><spring:message code="System-Statuses"/>:</label>
+		</div>
+		<div class="content">
+			<c:forEach items="${systemStatuses}" var="status">
+				<c:out value="${status.name}"/>
+				<br/>
+			</c:forEach>
+		</div>
+		<div class="bottom-dotted">
 			<div class="title">
 				<label><spring:message code="Edit-Statuses"/>:</label>
 			</div>
@@ -48,22 +57,39 @@
 				<form action="${removeStatus}" method="post" onsubmit="return confirm('<spring:message code="Confirm-Delete-Status"/>?')" id="removeStatus">
 					<select name="status">
 						<c:forEach items="${statuses}" var="status">
-							<option value="${status.id}">${status.name}</option>
+							<option value="${status.id}"><c:out value="${status.name}"/></option>
 						</c:forEach>
 					</select>
 					<button><spring:message code="Delete"/></button>
 				</form>
 			</div>
+		</div>
+		<form action="${addStatus}" method="post">
+			<div class="lable">
+				<label><spring:message code="Add-Status"/></label>
+			</div>
 			
 			<div class="title">
-				<label><spring:message code="Add-Status"/>:</label>
+				<label><spring:message code="Name"/>:</label>
 			</div>
 			<div class="content">
-				<form action="${addStatus}" method="post">
-					<input type="text" name="status">
-					<button><spring:message code="Save"/></button>
-				</form>
+				<input type="text" name="status">
 			</div>
-		</div>
+
+			<div class="title">
+				<label><spring:message code="Need-Date"/>:</label>
+			</div>
+			<div class="content">
+				<input type="checkbox" name="needDate" value="true">
+			</div>
+			
+			<div class="title">
+				<label><spring:message code="Need-Additional-Information"/>:</label>
+			</div>
+			<div class="content">
+				<input type="checkbox" name="needAddtionalInformation" value="true">
+				<button><spring:message code="Save"/></button>
+			</div>
+		</form>
 	</div>
 </div>

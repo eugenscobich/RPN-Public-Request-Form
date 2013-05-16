@@ -42,6 +42,12 @@
 	padding: 4px;
 }
 
+.public-request-form-administration .lable {
+	font-weight: bold;
+	padding: 4px;
+}
+
+
 .public-request-form-administration .content {
 	overflow: hidden;
     padding: 4px 4px 4px 0;
@@ -69,6 +75,11 @@
 
 .public-request-form-administration .response .title {
 	line-height: 28px;
+}
+
+.public-request-form-administration .response .group {
+	overflow: hidden;
+	margin-bottom: 10px;
 }
 
 .public-request-form-administration .response form {

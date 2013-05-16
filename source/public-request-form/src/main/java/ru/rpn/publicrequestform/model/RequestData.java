@@ -79,6 +79,9 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 	@Temporal(TemporalType.DATE)
 	private Date changeStatusDate;
 	
+	@Column
+	private String additionalStatusInformation;
+	
 	@ManyToOne
 	private Department department;
 	
@@ -290,6 +293,14 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public String getAdditionalStatusInformation() {
+		return additionalStatusInformation;
+	}
+
+	public void setAdditionalStatusInformation(String additionalStatusInformation) {
+		this.additionalStatusInformation = additionalStatusInformation;
 	}
 
 }

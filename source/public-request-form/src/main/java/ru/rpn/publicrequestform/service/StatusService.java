@@ -36,16 +36,28 @@ public class StatusService {
 	@PostInitialize
 	@Transactional
 	public void init() {
-		String[] statuses = initialSatuses.split(";");
+		String[] statuses = initialSatuses.split("\\|");
 		boolean check = true;
-		for (String status : statuses) {
-			if (check && statusDAO.get(status) != null) {
+		for (String statusConfiguration : statuses) {
+			String[] status = statusConfiguration.split(";");
+			if (check && statusDAO.get(status[0]) != null) {
 				break;
 			}
 			check = false;
 			Status s = new Status();
 			s.setIsEnabled(Boolean.TRUE);
-			s.setName(status);
+			s.setName(status[0]);
+			s.setIsSystem(Boolean.TRUE);
+			if (status[1].equals("1")) {
+				s.setNeedDate(Boolean.TRUE);	
+			} else {
+				s.setNeedDate(Boolean.FALSE);
+			}
+			if (status[2].equals("1")) {
+				s.setNeedAddtionalInformation(Boolean.TRUE);	
+			} else {
+				s.setNeedAddtionalInformation(Boolean.FALSE);
+			}
 			save(s);
 		}
 	}
@@ -78,15 +90,26 @@ public class StatusService {
 	}
 
 	@Transactional
-	public void add(String statusName) {
+	public void add(String statusName, Boolean needDate, Boolean needAddtionalInformation) {
 		Status s = new Status();
+		s.setIsSystem(Boolean.FALSE);
 		s.setIsEnabled(Boolean.TRUE);
 		s.setName(statusName);
+		s.setNeedAddtionalInformation(needAddtionalInformation);
+		s.setNeedDate(needDate);
 		save(s);
 	}
 	
 	@Transactional
 	public Status getReceivedStatus() {
 		return get(defaultStatus);
+	}
+
+	public List<Status> getAllSystemStatuses() {
+		return statusDAO.getAllSystemStatuses();
+	}
+
+	public List<Status> getAllActiveNotSystemStatuses() {
+		return statusDAO.getAllActiveNotSystemStatuses();
 	}
 }

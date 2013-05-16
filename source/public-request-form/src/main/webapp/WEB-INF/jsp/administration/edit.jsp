@@ -6,6 +6,7 @@
 <%@ taglib prefix="liferay-ui" uri="http://liferay.com/tld/ui" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<%@page import="java.util.Calendar"%>
 <%@page import="ru.rpn.publicrequestform.model.RequestData" %>
 <%@page import="com.liferay.portal.theme.ThemeDisplay" %>
 <%@page import="com.liferay.portal.kernel.util.WebKeys" %>
@@ -15,6 +16,7 @@
 <%@page import="com.liferay.portal.kernel.util.StringPool" %>
 <%@page import="com.liferay.portal.kernel.util.HttpUtil" %>
 <%@page import="com.liferay.portal.kernel.util.HtmlUtil" %>
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil" %>
 
 <portlet:actionURL name="changeResponseText" var="changeResponseText"/>
 <portlet:actionURL name="changeStatus" var="changeStatus"/>
@@ -140,7 +142,7 @@
 		</div>	
 	</div>
 	<div class="response">
-		<div>
+		<div class="group">
 			<div class="title">
 				<label><spring:message code="Response-Message"/>:</label>
 			</div>
@@ -153,29 +155,58 @@
 			</div>
 		</div>
 	
-		<div>
-			<div class="title" style="line-height: normal;">
-				<label><spring:message code="Change-Date"/>:</label>
-			</div>
-			<div class="content">
-				<span><fmt:formatDate value="${requestData.changeStatusDate}" pattern="dd.MM.yyyy"/></span>
-			</div>
-		</div>
-		
-		<div>
-			<div class="title">
-				<label><spring:message code="Change-Status"/>:</label>
-			</div>
-			<div class="content">
-				<form:form action="${changeStatus}" method="post" modelAttribute="requestData">
+		<div class="group">
+			<form:form action="${changeStatus}" method="post" modelAttribute="requestData" name="fm1">
+				<div class="title">
+					<label><spring:message code="Change-Status"/>:</label>
+				</div>
+				<div class="content">
 					<form:hidden path="id"/>
-					<form:select path="status" items="${statuses}" itemLabel="name"/>
-					<form:button><spring:message code="Save"/></form:button>
-				</form:form>
+					<form:select path="status" id="changeStatusSelectBox">
+						<c:forEach items="${statuses}" var="status">
+							<option value="${status.id}"
+								<c:if test="${status eq requestData.status}">selected="true"</c:if> 
+								data-needDate="${status.needDate}" 
+								data-needAddtionalInformation="${status.needAddtionalInformation}"><c:out value="${status.name}"/></option>
+						</c:forEach>
+					</form:select>
+					<form:button id="changeStatusSubmitButton"><spring:message code="Save"/></form:button>
+				</div>
+				<div id="changeStatusWraper">
+					
+				</div>
+				
+			</form:form>
+			<div id="changeStatusDate" style="display: none;">
+				<div class="title">
+					<label><spring:message code="Status-Date"/>:</label>
+				</div>
+				<div class="content">
+					<%
+						Calendar calendar = Calendar.getInstance();
+						if (requestData.getChangeStatusDate() != null) {
+							calendar.setTime(requestData.getChangeStatusDate());
+						}
+						int year = calendar.get(Calendar.YEAR);
+						int day = calendar.get(Calendar.DAY_OF_MONTH);
+						int maonth = calendar.get(Calendar.MONTH);
+					%>
+					<liferay-ui:input-date formName="fm1" yearRangeStart="1970"
+		           		yearRangeEnd="2100" yearValue="<%=year%>" monthValue="<%=maonth%>" dayValue="<%=day%>"
+		           		dayParam="d1" monthParam="m1" yearParam="y1"/>
+	           	</div>
+			</div>
+			<div id="changeStatusAdditionalInformation" style="display: none;">
+				<div class="title">
+					<label><spring:message code="Status-Additional-Information"/>:</label>
+				</div>
+				<div class="content">
+					<input type="text" name="addtionalInformation" value="${requestData.additionalStatusInformation}">
+				</div>
 			</div>
 		</div>
 		
-		<div>
+		<div class="group">
 			<div class="title">
 				<label><spring:message code="Transmit"/>:</label>
 			</div>
@@ -188,7 +219,7 @@
 			</div>
 		</div>
 		
-		<div>
+		<div class="group">
 			<div class="title">
 				<label><spring:message code="Change-Response-Status"/>:</label>
 			</div>
@@ -206,4 +237,38 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		$(function(){
+			var changeStatusSelectBox = $('#changeStatusSelectBox');
+			var changeStatusWraper = $('#changeStatusWraper');
+			var changeStatusDate = $('#changeStatusDate');
+			var changeStatusAdditionalInformation = $('#changeStatusAdditionalInformation');
+			var changeStatusSubmitButton = $('#changeStatusSubmitButton');
+			changeStatusSelectBox.change(function() {
+				changeStatusWraper.empty();
+				changeStatusSubmitButton.show();
+				var value = changeStatusSelectBox.find(":selected");
+				var needDate = value.attr('data-needDate');
+				var needAddtionalInformation = value.attr('data-needAddtionalInformation');
+				if (needDate == "true") {
+					changeStatusWraper.prepend(changeStatusDate.clone());
+					changeStatusWraper.find('#changeStatusDate').show();
+				}
+				if (needAddtionalInformation == "true") {
+					changeStatusWraper.append(changeStatusAdditionalInformation.clone());
+					changeStatusWraper.find('#changeStatusAdditionalInformation').show();
+				}
+				if (needAddtionalInformation == "true") {
+					changeStatusSubmitButton.hide();
+					changeStatusWraper.find('#changeStatusAdditionalInformation .content').append(changeStatusSubmitButton.clone());
+					changeStatusWraper.find('#changeStatusSubmitButton').show();
+				} else if (needDate == "true") {
+					changeStatusSubmitButton.hide();
+					changeStatusWraper.find('#changeStatusDate .content').append(changeStatusSubmitButton.clone());
+					changeStatusWraper.find('#changeStatusSubmitButton').show();
+				}
+			});
+			changeStatusSelectBox.change();
+		});
+	</script>
 </div>

@@ -23,6 +23,15 @@ public class Status  implements Serializable, Comparable<Status> {
 	
 	@Column
 	private Boolean isEnabled;
+	
+	@Column
+	private Boolean isSystem;
+	
+	@Column
+	private Boolean needDate;
+	
+	@Column
+	private Boolean needAddtionalInformation;
 
 	public Long getId() {
 		return id;
@@ -82,6 +91,32 @@ public class Status  implements Serializable, Comparable<Status> {
 		} else {
 			return 0;
 		}
+	}
+
+	public Boolean getNeedDate() {
+		return needDate;
+	}
+
+	public void setNeedDate(Boolean needDate) {
+		this.needDate = needDate;
+	}
+
+
+
+	public final Boolean getNeedAddtionalInformation() {
+		return needAddtionalInformation;
+	}
+
+	public final void setNeedAddtionalInformation(Boolean needAddtionalInformation) {
+		this.needAddtionalInformation = needAddtionalInformation;
+	}
+
+	public Boolean getIsSystem() {
+		return isSystem;
+	}
+
+	public void setIsSystem(Boolean isSystem) {
+		this.isSystem = isSystem;
 	}
 
 }
