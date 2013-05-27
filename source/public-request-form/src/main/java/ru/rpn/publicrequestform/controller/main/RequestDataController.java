@@ -93,17 +93,26 @@ public class RequestDataController {
 			return;
 		}
 		try {
+			String systemEmail = PreferencesController.getSystemEmail(request);
+			if (StringUtils.isEmpty(systemEmail) || !systemEmail.contains("@")) {
+				model.addAttribute("errors", "no-system-email");
+				response.setRenderParameter("view", "error");
+				return;
+			} 
 			checkCaptcha(request, response);
-			requestDataService.save(requestData, PortalUtil.getCompanyId(request));
+			requestDataService.save(requestData, PortalUtil.getCompanyId(request), systemEmail);
 			model.addAttribute("requestData", new RequestData());
 			model.addAttribute("success", "success");
 		} catch (FileSizeException e) {
+			LOG.error(e);
 			model.addAttribute("errors", "file-size-error");
 			response.setRenderParameter("view", "error");
 		} catch (CaptchaException e) {
+			LOG.error(e);
 			model.addAttribute("errors", "captcha-error");
 			response.setRenderParameter("view", "error");
 		} catch (Exception e) {
+			LOG.error(e);
 			model.addAttribute("errors", "system-error");
 			response.setRenderParameter("view", "error");
 		}

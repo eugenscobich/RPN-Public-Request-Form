@@ -1,5 +1,7 @@
 package ru.rpn.publicrequestform.controller.administration;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -9,6 +11,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +35,10 @@ import ru.rpn.publicrequestform.service.StatusService;
 import ru.rpn.publicrequestform.util.bind.CustomDepartmentPropertyEditor;
 import ru.rpn.publicrequestform.util.bind.CustomStatusPropertyEditor;
 
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.model.PortletPreferences;
+import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 
 @Controller
@@ -116,9 +123,26 @@ public class AdministrationController {
 	}
 	
 	@ActionMapping("changeStatus")
-	public void changeStatus(ActionRequest request, ActionResponse response, Model model, @RequestParam("id") Long id,
-			@RequestParam("status") Long statusId) throws Exception {
-		requestDataService.changeStatus(id, statusId);
+	public void changeStatus(ActionRequest request, ActionResponse response, Model model, @RequestParam("id") Long id, 
+			@RequestParam("status") Long statusId,
+			@RequestParam(value = "addtionalInformation", required = false) String addtionalInformation, 
+			@RequestParam(value = "d1", required = false) Integer d1,
+			@RequestParam(value = "m1", required = false) Integer m1, 
+			@RequestParam(value = "y1", required = false) Integer y1) throws Exception {
+		Date date = null;
+		if (d1 != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.DAY_OF_MONTH, d1);
+			calendar.set(Calendar.MONTH, m1);
+			calendar.set(Calendar.YEAR, y1);
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			date = calendar.getTime();
+		}
+		
+		requestDataService.changeStatus(id, statusId, date, addtionalInformation);
 		model.addAttribute("success", "success-change");
 		response.setRenderParameter("id", id.toString());
 		response.setRenderParameter("view", "editRequestData");
@@ -136,8 +160,23 @@ public class AdministrationController {
 	@ActionMapping("changeResponceStatus")
 	public void changeResponceStatus(ActionRequest request, ActionResponse response, Model model, @RequestParam("id") Long id,
 			@RequestParam("responseStatus") ResponseStatus responseStatus) throws Exception {
-		requestDataService.changeResponceStatus(id, responseStatus);
-		model.addAttribute("success", "success-change");
+		List<PortletPreferences> portletPreferences = PortletPreferencesLocalServiceUtil.getPortletPreferences();
+		String systemEmail = "";
+		for (PortletPreferences portletPreferences2 : portletPreferences) {
+			if (portletPreferences2.getPortletId().equals("PublicRequestForm_WAR_publicrequestfromportlet")) {
+				javax.portlet.PortletPreferences preferences = PortletPreferencesLocalServiceUtil.getPreferences(PortalUtil.getCompanyId(request),
+						portletPreferences2.getOwnerId(), portletPreferences2.getOwnerType(), 
+						portletPreferences2.getPlid(), portletPreferences2.getPortletId());
+				systemEmail = preferences.getValue("systemEmail", PropsUtil.get(PropsKeys.MAIL_SESSION_MAIL_SMTP_USER));
+				break;
+			}
+		}
+		if (StringUtils.isEmpty(systemEmail) || !systemEmail.contains("@")) {
+			model.addAttribute("errors", "no-system-email");	
+		} else {
+			requestDataService.changeResponceStatus(id, responseStatus, systemEmail);
+			model.addAttribute("success", "success-change");
+		}
 		response.setRenderParameter("id", id.toString());
 		response.setRenderParameter("view", "editRequestData");
 	}

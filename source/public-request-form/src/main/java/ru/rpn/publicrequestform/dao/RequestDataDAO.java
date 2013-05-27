@@ -1,6 +1,6 @@
 package ru.rpn.publicrequestform.dao;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class RequestDataDAO extends BaseDAO<RequestData> {
 			if (!statusId.equals(0l) || !requestSubjectId.equals(0l)) {
 				queryString = queryString + "and ";
 			}
-			DateFormat dateFormat = DateFormat.getDateInstance();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			queryString = queryString + "rd.date='" + dateFormat.format(date) + "'";
 		}
 		

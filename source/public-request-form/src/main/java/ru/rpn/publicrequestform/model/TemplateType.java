@@ -2,7 +2,8 @@ package ru.rpn.publicrequestform.model;
 
 public enum TemplateType {
 
-	SUBMIT("/templates/submit-template.vm");
+	SUBMIT("/templates/submit-template.vm"),
+	SENDED("/templates/sended-template.vm");
 	
 	private String template;
 	

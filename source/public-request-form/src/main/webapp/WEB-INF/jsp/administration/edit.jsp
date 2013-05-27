@@ -224,7 +224,7 @@
 				<label><spring:message code="Change-Response-Status"/>:</label>
 			</div>
 			<div class="content">
-				<form:form action="${changeResponceStatus}" method="post" modelAttribute="requestData">
+				<form:form action="${changeResponceStatus}" method="post" modelAttribute="requestData" id="changeResponceStatusForm">
 					<form:hidden path="id"/>
 					<spring:eval expression="T(ru.rpn.publicrequestform.model.ResponseStatus).values()" var="responseStatuses" />
 					<form:select path="responseStatus">
@@ -238,6 +238,7 @@
 		</div>
 	</div>
 	<script>
+	
 		$(function(){
 			var changeStatusSelectBox = $('#changeStatusSelectBox');
 			var changeStatusWraper = $('#changeStatusWraper');
@@ -269,6 +270,20 @@
 				}
 			});
 			changeStatusSelectBox.change();
+			
+			var changeResponceStatusForm = $('#changeResponceStatusForm');
+			changeResponceStatusForm.submit(function(){
+				var select = $(this).find('select[name=responseStatus]');
+				if (select.val() == 'SENDED') {
+					if(confirm('<spring:message code="Confirm-Submit-Response-Status"/>?')) {
+						return true;
+					} else {
+						return false;
+					} 
+				} 
+				return true;
+			});
+			
 		});
 	</script>
 </div>

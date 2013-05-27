@@ -14,9 +14,27 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>VIEW</portlet-mode>
+			<portlet-mode>EDIT</portlet-mode>
 		</supports>
 		<resource-bundle>messages</resource-bundle>
 	</portlet>
+	
+	<portlet>
+		<portlet-name>PublicRequestCheckForm</portlet-name>
+		<display-name>Public Request Check Form</display-name>
+		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>classpath:check-context.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>VIEW</portlet-mode>
+			<portlet-mode>EDIT</portlet-mode>
+		</supports>
+		<resource-bundle>check</resource-bundle>
+	</portlet>
+	
 	
 	<portlet>
 		<portlet-name>PublicRequestFormAdminisrtation</portlet-name>

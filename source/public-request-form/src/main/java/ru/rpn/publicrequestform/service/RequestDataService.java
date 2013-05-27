@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.internet.AddressException;
+
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -45,7 +47,7 @@ public class RequestDataService {
 	private StatusService statusService;
 	
 	@Transactional
-	public void save(RequestData requestData, long companyId) throws Exception {
+	public void save(RequestData requestData, long companyId, String systemEmail) throws Exception {
 		Date now = new Date();
 		requestData.setDate(now);
 		requestData.setStatus(statusService.getReceivedStatus());
@@ -59,7 +61,7 @@ public class RequestDataService {
 		velocityContext.put("requestNumber", requestData.getCode());
 		String content = templateService.getTemplateContent(TemplateType.SUBMIT, velocityContext);
 		String subject = messageSource.getMessage("template.subject." + TemplateType.SUBMIT.name(), new String[]{requestData.getCode()}, null);
-		mailService.sendMail(requestData.getEmail(), subject, content, null);
+		mailService.sendMail(systemEmail, requestData.getEmail(), subject, content, null);
 	}
 	
 
@@ -81,11 +83,12 @@ public class RequestDataService {
 	}
 
 	@Transactional
-	public void changeStatus(Long id, Long statusId) {
+	public void changeStatus(Long id, Long statusId, Date date, String addtionalInformation) {
 		RequestData requestData = get(id);
 		Status status = statusService.get(statusId);
 		requestData.setStatus(status);
-		requestData.setChangeStatusDate(new Date());
+		requestData.setChangeStatusDate(date);
+		requestData.setAdditionalStatusInformation(addtionalInformation);
 		requestDataDAO.merge(requestData);
 	}
 
@@ -97,10 +100,17 @@ public class RequestDataService {
 	}
 
 	@Transactional
-	public void changeResponceStatus(Long id, ResponseStatus responseStatus) {
+	public void changeResponceStatus(Long id, ResponseStatus responseStatus, String systemEmail) throws AddressException {
 		RequestData requestData = get(id);
 		requestData.setResponseStatus(responseStatus);
 		requestDataDAO.merge(requestData);
+		if (responseStatus == ResponseStatus.SENDED) {
+			VelocityContext velocityContext = new VelocityContext();
+			velocityContext.put("response", requestData.getResponseMessage());
+			String content = templateService.getTemplateContent(TemplateType.SENDED, velocityContext);
+			String subject = messageSource.getMessage("template.subject." + TemplateType.SENDED.name(), new String[]{requestData.getCode()}, null);
+			mailService.sendMail(systemEmail, requestData.getEmail(), subject, content, null);
+		}
 	}
 
 	@Transactional

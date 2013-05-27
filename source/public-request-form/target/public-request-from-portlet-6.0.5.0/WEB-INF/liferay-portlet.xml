@@ -6,6 +6,11 @@
 		<portlet-name>PublicRequestForm</portlet-name>
 		<header-portlet-css>/css/style.css</header-portlet-css>
 	</portlet>
+	<portlet>
+		<portlet-name>PublicRequestCheckForm</portlet-name>
+		<header-portlet-css>/css/style.css</header-portlet-css>
+		<header-portlet-javascript>/js/jquery-1.9.1.min.js</header-portlet-javascript>
+	</portlet>
 	
 	<portlet>
 		<portlet-name>PublicRequestFormAdminisrtation</portlet-name>
