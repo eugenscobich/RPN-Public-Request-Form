@@ -8,7 +8,7 @@
 <portlet:actionURL var="find" name="find" windowState="EXCLUSIVE"/>
 
 
-<div class="public-request-form">
+<div class="public-request-check-form">
 	<h1><spring:message code="Check-iformation-about-application"/></h1>
 	<div>
 		<c:forEach items="${requestSubjects}" var="requestSubject" varStatus="status">
@@ -31,14 +31,14 @@
 	</div>
 	<script>	
 		$(document).ready(function(){
-			var form = $('.public-request-form form');
-			var requestSubject = $('.public-request-form input[name=requestSubject]');
+			var form = $('.public-request-check-form form');
+			var requestSubject = $('.public-request-check-form input[name=requestSubject]');
 			var year = '${year}';
 			requestSubject.change(function(){
 				var value = $(this).val();
-				$('.public-request-form .format').html("&nbsp;" + value + "-" + year + "/&nbsp;");
+				$('.public-request-check-form .format').html("&nbsp;" + value + "-" + year + "/&nbsp;");
 			});
-			$('.public-request-form input[name=requestSubject][checked=true]').change();
+			$('.public-request-check-form input[name=requestSubject][checked=true]').change();
 			
 			form.submit(function(){
 				var id = form.find('input[name=id]').val();
@@ -51,7 +51,7 @@
 						success: function(data) {
 							console.log(data);
 							if (data) {
-								$('.public-request-form .output').html(data);
+								$('.public-request-check-form .output').html(data);
 							}
 						}
 					});
