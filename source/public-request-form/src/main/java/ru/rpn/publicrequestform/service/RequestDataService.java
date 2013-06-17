@@ -1,16 +1,23 @@
 package ru.rpn.publicrequestform.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.mail.internet.AddressException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import ru.rpn.publicrequestform.dao.RequestDataDAO;
 import ru.rpn.publicrequestform.model.Attachment;
@@ -62,8 +69,42 @@ public class RequestDataService {
 		String content = templateService.getTemplateContent(TemplateType.SUBMIT, velocityContext);
 		String subject = messageSource.getMessage("template.subject." + TemplateType.SUBMIT.name(), new String[]{requestData.getCode()}, null);
 		mailService.sendMail(systemEmail, requestData.getEmail(), subject, content, null);
+		velocityContext.put("requestData", requestData);
+		content = templateService.getTemplateContent(TemplateType.ADMIN_SUBMIT, velocityContext);
+		subject = messageSource.getMessage("template.subject." + TemplateType.ADMIN_SUBMIT.name(), new String[]{requestData.getCode()}, null);
+		Map<String, File> attachmentsMap = getAttachementsMap(requestData);
+		mailService.sendMail(systemEmail, systemEmail, subject, content, attachmentsMap);
 	}
 	
+
+	private Map<String, File> getAttachementsMap(RequestData requestData) {
+		Map<String, File> attachements = new HashMap<String, File>();
+		for (MultipartFile multipartFile : requestData.getMultipartFiles()) {
+			File file = null;
+			File file2 = null;
+			try {
+				file = File.createTempFile("tempfile", ".tmp"); // will create files like tempfileXXX.tmp  
+				file.deleteOnExit();
+
+				file2 = new File(file.getParentFile(), multipartFile.getOriginalFilename());
+			    if(file2.exists()) {
+			    	file2.delete();
+			    	file2 = new File(file.getParentFile(), multipartFile.getOriginalFilename());
+			    }
+			    file2.deleteOnExit();
+			    boolean success = file.renameTo(file2);
+			    if (!success) {
+			        continue;
+			    }
+				FileOutputStream out = new FileOutputStream(file2);
+		        IOUtils.copy(multipartFile.getInputStream(), out);
+		    } catch (IOException e) {
+				e.printStackTrace();
+			}
+			attachements.put(multipartFile.getOriginalFilename(), file2);
+		}
+		return attachements;
+	}
 
 	@Transactional(readOnly = true)
 	public List<RequestData> getAll() {
