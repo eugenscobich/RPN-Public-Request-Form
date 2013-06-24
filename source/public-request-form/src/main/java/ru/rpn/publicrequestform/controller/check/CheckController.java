@@ -44,15 +44,16 @@ public class CheckController {
 	
 
 	@ActionMapping("find")
-	public void find(ActionRequest request, ActionResponse response, Model model, @RequestParam("id") String id) {
+	public void find(ActionRequest request, ActionResponse response, Model model, @RequestParam("id") String id, @RequestParam("requestSubjectIndex") String requestSubjectIndex) {
 		
 		response.setRenderParameter("view", "result");
 		response.setRenderParameter("id", id);
+		response.setRenderParameter("requestSubjectIndex", requestSubjectIndex);
 
 	}
 	
 	@RenderMapping(params="view=result")
-	public String result(RenderRequest request, RenderResponse response, Model model, @RequestParam("id") String id) {
+	public String result(RenderRequest request, RenderResponse response, Model model, @RequestParam("id") String id, @RequestParam("requestSubjectIndex") String requestSubjectIndex) {
 		RequestData requestData = null;
 		Long requestDataId = null;
 		try {
@@ -62,6 +63,9 @@ public class CheckController {
 		}
 		if (requestDataId != null) {
 			requestData = requestDataService.get(requestDataId);
+		}
+		if (!requestData.getRequestSubject().getIndex().equalsIgnoreCase(requestSubjectIndex)) {
+			requestData = null;
 		}
 		model.addAttribute("requestData", requestData);
 		response.setContentType("UTF-8");
