@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -57,6 +58,9 @@ public class RequestDataController {
 	@Autowired
 	private CustomRequestSubjectPropertyEditor customRequestSubjectPropertyEditor;
 	
+	@Autowired
+	private MessageSource messageSource;
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(RequestSubject.class, customRequestSubjectPropertyEditor);
@@ -76,11 +80,15 @@ public class RequestDataController {
 	
 	@RenderMapping
 	public String view(RenderRequest request, RenderResponse response, Model model, @ModelAttribute("requestData") RequestData requestData) {
+		model.addAttribute("enableForm", PreferencesController.getEnableForm(request));
+		model.addAttribute("disbledFormMessage", PreferencesController.getDisbledFormMessage(request, messageSource));
 		return "view";
 	}
 	
 	@RenderMapping(params="view=error")
 	public String error(RenderRequest request, RenderResponse response, Model model) {
+		model.addAttribute("enableForm", PreferencesController.getEnableForm(request));
+		model.addAttribute("disbledFormMessage", PreferencesController.getDisbledFormMessage(request, messageSource));
 		return "view";
 	}
 	
@@ -120,6 +128,8 @@ public class RequestDataController {
 	
 	@RenderMapping(params="view=success")
 	public String success(RenderRequest request, RenderResponse response, Model model) {
+		model.addAttribute("enableForm", PreferencesController.getEnableForm(request));
+		model.addAttribute("disbledFormMessage", PreferencesController.getDisbledFormMessage(request, messageSource));
 		return "success";
 	}
 	

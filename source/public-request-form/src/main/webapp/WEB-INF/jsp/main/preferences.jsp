@@ -28,6 +28,21 @@
 				<div class="content">
 					<input type="text" name="systemEmail" value="${systemEmail}">
 				</div>
+				<br/>
+				<div class="title">
+					<label><spring:message code="Enable-Form"/>:</label>
+				</div>
+				<div class="content">
+					<input type="checkbox" name="enableForm" <c:if test="${enableForm}">checked="checked"</c:if> value="true">
+				</div>
+				<br/>
+				<div class="title">
+					<label><spring:message code="Disabled-Form-Message"/>:</label>
+				</div>
+				<div class="content">
+					<input type="text" name="disbledFormMessage" value="${disbledFormMessage}">
+				</div>
+				<br/>
 				<button><spring:message code="Save"/></button>
 			</form>
 		</div>
