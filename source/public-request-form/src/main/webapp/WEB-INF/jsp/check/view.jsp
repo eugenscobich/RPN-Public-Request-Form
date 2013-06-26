@@ -43,7 +43,6 @@
 			form.submit(function(){
 				var id = form.find('input[name=id]').val();
 				var requestSubjectIndex = $('.public-request-check-form input[name=requestSubject]:checked').val();
-				alert(requestSubjectIndex);
 				if(id) {
 					$.ajax({
 						url: form.attr('action'),

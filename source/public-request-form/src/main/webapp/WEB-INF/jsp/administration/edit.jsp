@@ -116,7 +116,7 @@
 			<label><spring:message code="Text-Message"/>:</label>
 		</div>
 		<div class="content">
-			<span><c:out value="${requestData.message}"/></span>
+			<pre style="font-size: inherit; font: inherit;"><c:out value="${requestData.message}"/></pre>
 		</div>
 	</div>
 	<div class="bottom-dotted">

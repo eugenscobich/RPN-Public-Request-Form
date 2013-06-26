@@ -6,5 +6,5 @@
 	<b>E-mail:</b> $requestData.email<br/>
 	<b>Телефон:</b> $requestData.phone<br/>
 	<b>Тема обращения:</b> $requestData.requestSubject.label<br/>
-	<b>Текст обращения:</b> $requestData.message
+	<b>Текст обращения:</b> <pre style="font-size: inherit; font: inherit;">$requestData.message</pre>
 </p>
