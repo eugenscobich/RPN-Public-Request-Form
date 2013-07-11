@@ -1,4 +1,5 @@
 <p>
+	<b>Номер заявки:</b> $requestData.getCode()<br/>
 	<b>Фамилия:</b> $requestData.firstName<br/>
 	<b>Имя:</b> $requestData.lastName<br/>
 	<b>Отчество:</b> $requestData.middleName<br/>
@@ -6,5 +7,5 @@
 	<b>E-mail:</b> $requestData.email<br/>
 	<b>Телефон:</b> $requestData.phone<br/>
 	<b>Тема обращения:</b> $requestData.requestSubject.label<br/>
-	<b>Текст обращения:</b> <pre style="font-size: inherit; font: inherit;">$requestData.message</pre>
+	<b>Текст обращения:</b><br/> $requestData.getFormatedMessage()
 </p>

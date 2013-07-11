@@ -37,6 +37,7 @@
 		<span><a href="${back}">&lt;&lt;<spring:message code="Back"/></a></span>
 		<span><a href="${editStatuses}"> <spring:message code="Edit-Statuses"/></a></span>
 		<span><a href="${editDepartment}"> <spring:message code="Edit-Departments"/></a></span>
+		<span><a href="#" id="printBtn"> <spring:message code="Print"/></a></span>
 	</div>
 	<c:choose>
 		<c:when test="${not empty success}">
@@ -46,100 +47,101 @@
 			<div class="portlet-msg-error"><spring:message code="${errors}"/></div>
 		</c:when>
 	</c:choose>
-	
-	<div class="group">
-		<div class="title">
-			<label><spring:message code="Date"/>:</label>
+	<div id="printArea">	
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Date"/>:</label>
+			</div>
+			<div class="content">
+				<span><fmt:formatDate value="${requestData.date}" pattern="dd.MM.yyyy"/></span>
+			</div>
 		</div>
-		<div class="content">
-			<span><fmt:formatDate value="${requestData.date}" pattern="dd.MM.yyyy"/></span>
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="First-Name"/>:</label>
+			</div>
+			<div class="content">
+				<span><c:out value="${requestData.firstName}"/></span>
+			</div>
 		</div>
-	</div>
-	<div class="group">
-		<div class="title">
-			<label><spring:message code="First-Name"/>:</label>
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Last-Name"/>:</label>
+			</div>
+			<div class="content">
+				<span><c:out value="${requestData.lastName}"/></span>
+			</div>
 		</div>
-		<div class="content">
-			<span><c:out value="${requestData.firstName}"/></span>
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Middle-Name"/>:</label>
+			</div>
+			<div class="content">
+				<span><c:out value="${requestData.middleName}"/></span>
+			</div>
 		</div>
-	</div>
-	<div class="group">
-		<div class="title">
-			<label><spring:message code="Last-Name"/>:</label>
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Address"/>:</label>
+			</div>
+			<div class="content">
+				<span><c:out value="${requestData.address}"/></span>
+			</div>
 		</div>
-		<div class="content">
-			<span><c:out value="${requestData.lastName}"/></span>
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Email"/>:</label>
+			</div>
+			<div class="content">
+				<span><c:out value="${requestData.email}"/></span>
+			</div>
 		</div>
-	</div>
-	<div class="group">
-		<div class="title">
-			<label><spring:message code="Middle-Name"/>:</label>
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Phone"/>:</label>
+			</div>
+			<div class="content">
+				<span><c:out value="${requestData.phone}"/></span>
+			</div>
 		</div>
-		<div class="content">
-			<span><c:out value="${requestData.middleName}"/></span>
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Request-Subject"/>:</label>
+			</div>
+			<div class="content">
+				<span><c:out value="${requestData.requestSubject.label}"/></span>
+			</div>
 		</div>
-	</div>
-	<div class="group">
-		<div class="title">
-			<label><spring:message code="Address"/>:</label>
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Text-Message"/>:</label>
+			</div>
+			<div class="content">
+				<p><c:out value="${requestData.formatedMessage}" escapeXml="false"/></p>
+			</div>
 		</div>
-		<div class="content">
-			<span><c:out value="${requestData.address}"/></span>
+		<div class="bottom-dotted">
+			<div class="title">
+				<label><spring:message code="Files"/>:</label>
+			</div>
+			<div class="content">
+				<%
+					RequestData requestData = (RequestData)request.getAttribute("requestData"); 
+					ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+					for (Attachment attachment : requestData.getAttachments()) {
+						DLFileEntry fileEntry = DLFileEntryLocalServiceUtil.getFileEntry(attachment.getEntryFileId());
+					 	fileEntry = fileEntry.toEscapedModel();
+					 	long fileEntryId = fileEntry.getFileEntryId();
+					 	long folderId = fileEntry.getFolderId();
+					 	String title = fileEntry.getTitle();
+					 	String fileUrl = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + fileEntry.getGroupId() + StringPool.SLASH + folderId + StringPool.SLASH + HttpUtil.encodeURL(HtmlUtil.unescape(title));
+						%>
+							<span><a href="<%=fileUrl%>"><%=HttpUtil.encodeURL(title)%></a>; </span>					
+						<%
+					}
+				%>
+			</div>	
 		</div>
-	</div>
-	<div class="group">
-		<div class="title">
-			<label><spring:message code="Email"/>:</label>
-		</div>
-		<div class="content">
-			<span><c:out value="${requestData.email}"/></span>
-		</div>
-	</div>
-	<div class="group">
-		<div class="title">
-			<label><spring:message code="Phone"/>:</label>
-		</div>
-		<div class="content">
-			<span><c:out value="${requestData.phone}"/></span>
-		</div>
-	</div>
-	<div class="group">
-		<div class="title">
-			<label><spring:message code="Request-Subject"/>:</label>
-		</div>
-		<div class="content">
-			<span><c:out value="${requestData.requestSubject.label}"/></span>
-		</div>
-	</div>
-	<div class="group">
-		<div class="title">
-			<label><spring:message code="Text-Message"/>:</label>
-		</div>
-		<div class="content">
-			<pre style="font-size: inherit; font: inherit;"><c:out value="${requestData.message}"/></pre>
-		</div>
-	</div>
-	<div class="bottom-dotted">
-		<div class="title">
-			<label><spring:message code="Files"/>:</label>
-		</div>
-		<div class="content">
-			<%
-				RequestData requestData = (RequestData)request.getAttribute("requestData"); 
-				ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-				for (Attachment attachment : requestData.getAttachments()) {
-					DLFileEntry fileEntry = DLFileEntryLocalServiceUtil.getFileEntry(attachment.getEntryFileId());
-				 	fileEntry = fileEntry.toEscapedModel();
-				 	long fileEntryId = fileEntry.getFileEntryId();
-				 	long folderId = fileEntry.getFolderId();
-				 	String title = fileEntry.getTitle();
-				 	String fileUrl = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + fileEntry.getGroupId() + StringPool.SLASH + folderId + StringPool.SLASH + HttpUtil.encodeURL(HtmlUtil.unescape(title));
-					%>
-						<span><a href="<%=fileUrl%>"><%=HttpUtil.encodeURL(title)%></a>; </span>					
-					<%
-				}
-			%>
-		</div>	
 	</div>
 	<div class="response">
 		<div class="group">
@@ -282,6 +284,42 @@
 					} 
 				} 
 				return true;
+			});
+			
+			
+			var $printBtn = $('#printBtn');
+			$printBtn.click(function(){
+				/*
+				$("#printArea").printThis({
+				      debug: false,              
+				      importCSS: true,           
+				      printContainer: true,      
+				      loadCSS: '<c:url value="/css/style.css"/>', 
+				      pageTitle: "Print",             
+				      removeInline: false
+					});
+				*/
+				
+				var $data = $('#printArea').clone();
+				$data.addClass('public-request-form-administration');
+				var mywindow = window.open('', 'Print', 'height=600,width=800');
+		        mywindow.document.write('<html><head><title>Print</title>');
+		        mywindow.document.write('<link rel="stylesheet" href="<c:url value="/css/style.css"/>" type="text/css" />');
+		        //mywindow.document.write('<script src="<c:url value="/js/jquery-1.9.1.min.js"/>" />');
+		        mywindow.document.write('</head><body>');
+		        mywindow.document.write($data.wrap('<div>').parent().html());
+		        
+		        mywindow.document.write('<script>setTimeout("window.print();", 1000);');
+		        mywindow.document.write('</scr' + 'ipt>');
+		        mywindow.document.write('</body></html>');
+		        
+
+		        //mywindow.print();
+		        //mywindow.close();
+
+		        
+		        
+		        return true;
 			});
 			
 		});

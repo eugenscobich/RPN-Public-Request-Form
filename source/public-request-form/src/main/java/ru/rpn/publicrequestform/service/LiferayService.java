@@ -23,6 +23,8 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.ResourcePermissionServiceUtil;
+import com.liferay.portal.service.RoleServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFolderNameException;
@@ -37,6 +39,14 @@ public class LiferayService {
 
 	public static final String PUBLIC_REQUEST_FORM_PARENT_FOLDER_NAME = "Public Request Form";
 
+	private static final String[] FOLDER_ACTIONS = { "VIEW", "ACCESS" };
+	private static final String FOLDER_RESOURCE_NAME = "com.liferay.portlet.documentlibrary.model.DLFolder";
+	private static final String ROLE_NAME = "Power User";
+	private static final String[] ENTRY_ACTIONS = { "VIEW" };
+	private static final String ENTRY_RESOURCE_NAME = "com.liferay.portlet.documentlibrary.model.DLFileEntry";
+
+	
+	
 	private void initiatePermissionCheckerIfNotStarted(long companyId) throws Exception {
 		if (PermissionThreadLocal.getPermissionChecker() == null) {
 			User user = UserLocalServiceUtil.getDefaultUser(companyId);
@@ -60,7 +70,11 @@ public class LiferayService {
 	private long createFolder(String name, long parentFolderId, long companyId, long groupId) throws PortalException, SystemException {
 		DLFolder dlFolder;
 		try {
+			final long roleId = RoleServiceUtil.getRole(companyId, ROLE_NAME).getRoleId();
 			dlFolder = DLFolderLocalServiceUtil.addFolder(getUserId(companyId), groupId, getRepositoryId(groupId, parentFolderId), name, name, new ServiceContext());
+			ResourcePermissionServiceUtil.setIndividualResourcePermissions(groupId, companyId,
+					FOLDER_RESOURCE_NAME, Long.toString(dlFolder.getPrimaryKey()), roleId, FOLDER_ACTIONS);
+
 			return dlFolder.getFolderId();
 		} catch (DuplicateFolderNameException dfne) {
 			dlFolder = DLFolderLocalServiceUtil.getFolder(groupId, parentFolderId, name);
@@ -110,6 +124,11 @@ public class LiferayService {
 		DLFileEntry fileEntry = DLFileEntryLocalServiceUtil.addFileEntry(
 			getUserId(companyId), groupId, parentFolderId, fileName, fileName, fileName, StringPool.BLANK,
 			StringPool.BLANK, new ByteArrayInputStream(bytes), bytes.length, new ServiceContext());
+		final long roleId = RoleServiceUtil.getRole(companyId, ROLE_NAME).getRoleId();
+		ResourcePermissionServiceUtil.setIndividualResourcePermissions(groupId, companyId,
+				ENTRY_RESOURCE_NAME, Long.toString(fileEntry.getPrimaryKey()), roleId, ENTRY_ACTIONS);
+
+		
 		return fileEntry.getFileEntryId();
 	}
 
