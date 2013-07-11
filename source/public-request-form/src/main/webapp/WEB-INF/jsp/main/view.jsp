@@ -60,13 +60,27 @@
 					<form:input path="email" cssClass="input"/><form:errors path="email" cssClass="error"/>
 				</div>
 				
+
+
+				
 				<div class="title">
 					<form:label path="phone"><spring:message code="Phone"/></form:label>
 				</div>
 				<div class="content">
 					<form:input path="phone" cssClass="input"/><form:errors path="phone" cssClass="error"/>
 				</div>
-				
+				<div class="title">
+					<form:label path="responseMethod"><spring:message code="Response-Method"/></form:label>
+				</div>
+				<div class="content">
+					<spring:eval expression="T(ru.rpn.publicrequestform.model.ResponseMethod).values()" var="responseMethods" />
+					<form:select path="responseMethod" cssClass="input">
+						<c:forEach items="${responseMethods}" var="responseMethod">
+							<form:option value="${responseMethod}"><spring:message code="ResponseMethod.${responseMethod}"/></form:option>
+						</c:forEach>
+					</form:select>
+					<form:errors path="responseMethod" cssClass="error"/>
+				</div>
 				<div class="title">
 					<form:label path="requestSubject"><spring:message code="Request-Subject"/></form:label>
 				</div>

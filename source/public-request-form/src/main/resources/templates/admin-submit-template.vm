@@ -6,6 +6,7 @@
 	<b>Полный почтовый адрес:</b> $requestData.address<br/>
 	<b>E-mail:</b> $requestData.email<br/>
 	<b>Телефон:</b> $requestData.phone<br/>
+	<b>Способ получения ответа:</b> $responseMethod<br/>
 	<b>Тема обращения:</b> $requestData.requestSubject.label<br/>
 	<b>Текст обращения:</b><br/> $requestData.getFormatedMessage()
 </p>

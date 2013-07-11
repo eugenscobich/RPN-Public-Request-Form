@@ -70,6 +70,7 @@ public class RequestDataService {
 		String subject = messageSource.getMessage("template.subject." + TemplateType.SUBMIT.name(), new String[]{requestData.getCode()}, null);
 		mailService.sendMail(systemEmail, requestData.getEmail(), subject, content, null);
 		velocityContext.put("requestData", requestData);
+		velocityContext.put("responseMethod", messageSource.getMessage("ResponseMethod." + requestData.getResponseMethod().name(), null, null));
 		content = templateService.getTemplateContent(TemplateType.ADMIN_SUBMIT, velocityContext);
 		subject = messageSource.getMessage("template.subject." + TemplateType.ADMIN_SUBMIT.name(), new String[]{requestData.getCode()}, null);
 		Map<String, File> attachmentsMap = getAttachementsMap(requestData);

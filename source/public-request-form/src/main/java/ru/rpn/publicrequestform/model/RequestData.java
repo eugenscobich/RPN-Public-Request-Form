@@ -71,6 +71,11 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 	@Size(max = 250)
 	private String phone;
 	
+	
+	@Column
+	@Enumerated(EnumType.STRING)
+	private ResponseMethod responseMethod;
+	
 	@ManyToOne
 	private RequestSubject requestSubject;
 
@@ -315,6 +320,17 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 
 	public void setFormatedMessage(String formatedMessage) {
 		this.message = formatedMessage;
+	}
+
+	public ResponseMethod getResponseMethod() {
+		if (responseMethod == null) {
+			return ResponseMethod.EMAIL;
+		}
+		return responseMethod;
+	}
+
+	public void setResponseMethod(ResponseMethod responseMethod) {
+		this.responseMethod = responseMethod;
 	}
 
 }

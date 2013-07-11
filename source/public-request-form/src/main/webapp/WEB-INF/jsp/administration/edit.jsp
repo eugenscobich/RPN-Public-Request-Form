@@ -104,6 +104,16 @@
 				<span><c:out value="${requestData.phone}"/></span>
 			</div>
 		</div>
+		
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Response-Method"/>:</label>
+			</div>
+			<div class="content">
+				<span><spring:message code="ResponseMethod.${requestData.responseMethod}"/></span>
+			</div>
+		</div>
+		
 		<div class="group">
 			<div class="title">
 				<label><spring:message code="Request-Subject"/>:</label>
