@@ -1,0 +1,113 @@
+.error {
+	color: red;
+}
+
+.public-request-form label {
+	font-weight: bold;
+	padding-top: 4px;
+}
+
+.public-request-form .input {
+	width: 400px;
+}
+
+.public-request-form textarea.input{
+	height: 200px;
+}
+
+.public-request-form-administration table {
+	border-right: 1px solid black;
+	border-top: 1px solid black;
+	width: 100%;
+}
+
+.public-request-form-administration table th, .public-request-form-administration table td {
+	border-bottom: 1px solid black;
+	border-left: 1px solid black;
+	padding: 4px;
+}
+
+.public-request-form-administration table th {
+	font-weight: bold;
+}
+
+.public-request-form-administration {
+	overflow: hidden;
+}
+
+.public-request-form-administration .title {
+	float: left;
+	width: 150px;
+	font-weight: bold;
+	padding: 4px;
+}
+
+.public-request-form-administration .lable {
+	font-weight: bold;
+	padding: 4px;
+}
+
+
+.public-request-form-administration .content {
+	overflow: hidden;
+    padding: 4px 4px 4px 0;
+}
+
+.public-request-form-administration .icon  {
+	height: 16px;
+	width: 16px;
+	float: left;
+}
+
+.public-request-form-administration .icon-edit  {
+	background: url("../img/edit.png") no-repeat;
+}
+
+.public-request-form-administration .icon-delete {
+	background: url("../img/delete.png") no-repeat;
+}
+
+.public-request-form-administration .bottom-dotted {
+	border-bottom: dashed 1px;
+	overflow: hidden;
+	margin-bottom: 6px;
+}
+
+.public-request-form-administration .response .title {
+	line-height: 28px;
+}
+
+.public-request-form-administration .response .group {
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+.public-request-form-administration .response form {
+	line-height: 28px;
+}
+
+.public-request-form-administration .response button {
+	float: right;
+}
+
+.public-request-form-administration .response textarea {
+	width: 100%;
+}
+
+.public-request-form-administration tr.selected td {
+	background-color: #FDBFBF;
+}
+
+.public-request-form-administration th {
+	background-color: #C0C0C0;
+}
+
+.public-request-form-administration .checkbox {
+	float: left;
+	width: 16px;
+}
+
+.public-request-form-administration .group {
+	overflow: hidden;
+}
+

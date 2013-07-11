@@ -28,6 +28,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.liferay.portal.kernel.util.HtmlUtil;
+
 @Entity
 @Table(name = "prf_request_data")
 public class RequestData implements Serializable, Comparable<RequestData> {
@@ -239,6 +241,8 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 		return getRequestSubject().getIndex() + "-" + Integer.toString(calendar.get(Calendar.YEAR)).substring(2) + "/" + getId();
 	}
 	
+	public void setCode(String code) {}
+	
 	public String getStripMessage() {
 		if (message.length() > 50) {
 			return message.substring(0, 50) + "...";
@@ -247,6 +251,8 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 		}
 	}
 
+	public void setStripMessage(String stripMessage) {}
+	
 	public String getResponseMessage() {
 		return responseMessage;
 	}
@@ -301,6 +307,14 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 
 	public void setAdditionalStatusInformation(String additionalStatusInformation) {
 		this.additionalStatusInformation = additionalStatusInformation;
+	}
+	
+	public String getFormatedMessage() {
+		return HtmlUtil.escape(message).replace("\n", "<br/>");
+	}
+
+	public void setFormatedMessage(String formatedMessage) {
+		this.message = formatedMessage;
 	}
 
 }
