@@ -71,6 +71,9 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 	@Size(max = 250)
 	private String phone;
 	
+	@Column
+	@Size(max = 250)
+	private String internalNumber;
 	
 	@Column
 	@Enumerated(EnumType.STRING)
@@ -331,6 +334,14 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 
 	public void setResponseMethod(ResponseMethod responseMethod) {
 		this.responseMethod = responseMethod;
+	}
+
+	public String getInternalNumber() {
+		return internalNumber;
+	}
+
+	public void setInternalNumber(String internalNumber) {
+		this.internalNumber = internalNumber;
 	}
 
 }

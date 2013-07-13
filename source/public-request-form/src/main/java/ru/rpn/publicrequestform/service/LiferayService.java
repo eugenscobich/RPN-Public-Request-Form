@@ -17,14 +17,16 @@ import ru.rpn.publicrequestform.model.RequestData;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
-import com.liferay.portal.service.ResourcePermissionServiceUtil;
-import com.liferay.portal.service.RoleServiceUtil;
+import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFolderNameException;
@@ -70,10 +72,10 @@ public class LiferayService {
 	private long createFolder(String name, long parentFolderId, long companyId, long groupId) throws PortalException, SystemException {
 		DLFolder dlFolder;
 		try {
-			final long roleId = RoleServiceUtil.getRole(companyId, ROLE_NAME).getRoleId();
+			final long roleId = RoleLocalServiceUtil.getRole(companyId, ROLE_NAME).getRoleId();
 			dlFolder = DLFolderLocalServiceUtil.addFolder(getUserId(companyId), groupId, getRepositoryId(groupId, parentFolderId), name, name, new ServiceContext());
-			ResourcePermissionServiceUtil.setIndividualResourcePermissions(groupId, companyId,
-					FOLDER_RESOURCE_NAME, Long.toString(dlFolder.getPrimaryKey()), roleId, FOLDER_ACTIONS);
+			ResourcePermissionLocalServiceUtil.setResourcePermissions(companyId,
+					FOLDER_RESOURCE_NAME, ResourceConstants.SCOPE_INDIVIDUAL, Long.toString(dlFolder.getPrimaryKey()), roleId, FOLDER_ACTIONS);
 
 			return dlFolder.getFolderId();
 		} catch (DuplicateFolderNameException dfne) {
@@ -124,11 +126,12 @@ public class LiferayService {
 		DLFileEntry fileEntry = DLFileEntryLocalServiceUtil.addFileEntry(
 			getUserId(companyId), groupId, parentFolderId, fileName, fileName, fileName, StringPool.BLANK,
 			StringPool.BLANK, new ByteArrayInputStream(bytes), bytes.length, new ServiceContext());
-		final long roleId = RoleServiceUtil.getRole(companyId, ROLE_NAME).getRoleId();
-		ResourcePermissionServiceUtil.setIndividualResourcePermissions(groupId, companyId,
-				ENTRY_RESOURCE_NAME, Long.toString(fileEntry.getPrimaryKey()), roleId, ENTRY_ACTIONS);
-
-		
+		final long roleId = RoleLocalServiceUtil.getRole(companyId, ROLE_NAME).getRoleId();
+		List<ResourcePermission> rps = ResourcePermissionLocalServiceUtil.getResourcePermissions(companyId, ENTRY_RESOURCE_NAME, ResourceConstants.SCOPE_INDIVIDUAL, Long.toString(fileEntry.getPrimaryKey()));
+		if (rps != null && !rps.isEmpty()) {
+			ResourcePermissionLocalServiceUtil.deleteResourcePermission(rps.get(0).getResourcePermissionId());
+		} 
+		ResourcePermissionLocalServiceUtil.setResourcePermissions(companyId, ENTRY_RESOURCE_NAME, ResourceConstants.SCOPE_INDIVIDUAL, Long.toString(fileEntry.getPrimaryKey()), roleId, ENTRY_ACTIONS);
 		return fileEntry.getFileEntryId();
 	}
 

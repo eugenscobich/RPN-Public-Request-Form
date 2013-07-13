@@ -157,6 +157,15 @@ public class AdministrationController {
 		response.setRenderParameter("view", "editRequestData");
 	}
 	
+	@ActionMapping("changeInternalNumber")
+	public void changeInternalNumber(ActionRequest request, ActionResponse response, Model model, @RequestParam("id") Long id,
+			@RequestParam("internalNumber") String internalNumber) throws Exception {
+		requestDataService.changeInternalNumber(id, internalNumber);
+		model.addAttribute("success", "success-change");
+		response.setRenderParameter("id", id.toString());
+		response.setRenderParameter("view", "editRequestData");
+	}
+	
 	@ActionMapping("changeResponceStatus")
 	public void changeResponceStatus(ActionRequest request, ActionResponse response, Model model, @RequestParam("id") Long id,
 			@RequestParam("responseStatus") ResponseStatus responseStatus) throws Exception {

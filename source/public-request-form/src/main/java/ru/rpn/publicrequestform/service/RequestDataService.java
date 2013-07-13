@@ -184,4 +184,11 @@ public class RequestDataService {
 	public List<RequestData> getAll(String firstName) {
 		return requestDataDAO.getAll(firstName);
 	}
+
+	@Transactional
+	public void changeInternalNumber(Long id, String internalNumber) {
+		RequestData requestData = get(id);
+		requestData.setInternalNumber(internalNumber);
+		requestDataDAO.merge(requestData);
+	}
 }

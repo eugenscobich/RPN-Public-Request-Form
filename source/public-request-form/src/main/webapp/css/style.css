@@ -111,3 +111,13 @@
 	overflow: hidden;
 }
 
+.public-request-form-administration .icon-open {
+	background: url("../img/right.png") no-repeat;
+}
+
+.public-request-form-administration .icon-close {
+	background: url("../img/down.png") no-repeat;
+}
+.public-request-form-administration .internal-number-toggle a {
+	margin-left: 4px;
+}

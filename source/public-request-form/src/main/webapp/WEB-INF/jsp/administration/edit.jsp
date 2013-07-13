@@ -22,6 +22,7 @@
 <portlet:actionURL name="changeStatus" var="changeStatus"/>
 <portlet:actionURL name="changeDepartament" var="changeDepartament"/>
 <portlet:actionURL name="changeResponceStatus" var="changeResponceStatus"/>
+<portlet:actionURL name="changeInternalNumber" var="changeInternalNumber"/>
 <portlet:renderURL var="back"/>
 <portlet:renderURL var="editDepartment" >
 	<portlet:param name="view" value="editDepartments"></portlet:param>
@@ -47,7 +48,34 @@
 			<div class="portlet-msg-error"><spring:message code="${errors}"/></div>
 		</c:when>
 	</c:choose>
-	<div id="printArea">	
+	<div id="printArea">
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Request-Number"/>:</label>
+			</div>
+			<div class="content">
+				<span style="float: left;"><c:out value="${requestData.code}"/>&nbsp;&nbsp;</span>
+				<span id="internal-number-toggle"><a href="#" class="icon icon-open"></a></span>
+			</div>
+		</div>
+		
+		<div id="internal-number" style="display: none;" class="response">
+			<div class="group">
+				<div class="title">
+					<label><spring:message code="Internal-Number"/>:</label>
+				</div>
+				<div class="content">
+					<form:form action="${changeInternalNumber}" method="post" modelAttribute="requestData">
+						<form:hidden path="id"/>
+						<form:input path="internalNumber"/>
+						<form:button><spring:message code="Save"/></form:button>
+					</form:form>
+				</div>
+			</div>
+		</div>
+	
+
+		
 		<div class="group">
 			<div class="title">
 				<label><spring:message code="Date"/>:</label>
@@ -56,6 +84,9 @@
 				<span><fmt:formatDate value="${requestData.date}" pattern="dd.MM.yyyy"/></span>
 			</div>
 		</div>
+		
+
+		
 		<div class="group">
 			<div class="title">
 				<label><spring:message code="First-Name"/>:</label>
@@ -331,6 +362,24 @@
 		        
 		        return true;
 			});
+			
+			
+			var $internalNumberToggle=$('#internal-number-toggle');
+			var $internalNumber=$('#internal-number');
+			
+			$internalNumberToggle.click(function(){
+				if ($internalNumber.is(':visible')) {
+					$internalNumber.hide();
+					$internalNumberToggle.find('a').removeClass('icon-close');
+					$internalNumberToggle.find('a').addClass('icon-open');
+				} else {
+					$internalNumber.show();
+					$internalNumberToggle.find('a').removeClass('icon-open');
+					$internalNumberToggle.find('a').addClass('icon-close');				}
+				
+				 //$internalNumber.toggle();
+			});
+			
 			
 		});
 	</script>
