@@ -60,7 +60,7 @@
 		</div>
 		
 		<div id="internal-number" style="display: none;" class="response">
-			<div class="group">
+			<div class="group" style="margin: 0">
 				<div class="title">
 					<label><spring:message code="Internal-Number"/>:</label>
 				</div>
@@ -158,7 +158,7 @@
 				<label><spring:message code="Text-Message"/>:</label>
 			</div>
 			<div class="content">
-				<p><c:out value="${requestData.formatedMessage}" escapeXml="false"/></p>
+				<p style="margin: 0"><c:out value="${requestData.formatedMessage}" escapeXml="false"/></p>
 			</div>
 		</div>
 		<div class="bottom-dotted">
