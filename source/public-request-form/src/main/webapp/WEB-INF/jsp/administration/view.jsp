@@ -142,9 +142,10 @@
 			} 
 		}
 	</script>
-	
+	<%-- 
 	<portlet:actionURL var="fix" name="fix"/>
 	<form action="${fix}" method="post">
 		<button>Fix</button>
 	</form>
+	 --%>
 </div>

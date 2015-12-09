@@ -45,7 +45,28 @@
 				<div class="content">
 					<form:input path="middleName" cssClass="input"/><form:errors path="middleName" cssClass="error"/>
 				</div>
-				
+				<div class="group">
+					<div class="title">
+						<form:label path="enterpriseTerritorySubject"><spring:message code="Enterprise-Territory-Subject"/> *</form:label>
+					</div>
+					<div class="content">
+						<form:select path="enterpriseTerritorySubject" cssClass="input">
+							<form:options items="${subjects}" itemLabel="name"/>
+						</form:select>
+						<form:errors path="enterpriseTerritorySubject"  cssClass="error"/>
+					</div>
+				</div>
+				<div class="group">
+					<div class="title">
+						<form:label path="ownerTerritorySubject"><spring:message code="Owner-Territory-Subject"/> *</form:label>
+					</div>
+					<div class="content">
+						<form:select path="ownerTerritorySubject" cssClass="input">
+							<form:options items="${subjects}" itemLabel="name"/>
+						</form:select>
+						<form:errors path="ownerTerritorySubject"  cssClass="error"/>
+					</div>
+				</div>
 				<div class="title">
 					<form:label path="address"><spring:message code="Address"/> *</form:label>
 				</div>

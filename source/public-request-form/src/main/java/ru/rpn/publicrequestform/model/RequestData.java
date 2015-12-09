@@ -87,6 +87,12 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 	private RequestSubject requestSubject;
 
 	@ManyToOne
+	private Subject enterpriseTerritorySubject;
+	
+	@ManyToOne
+	private Subject ownerTerritorySubject;
+	
+	@ManyToOne
 	private Status status;
 	
 	@Column
@@ -354,6 +360,22 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 
 	public void setSocialStatus(SocialStatus socialStatus) {
 		this.socialStatus = socialStatus;
+	}
+
+	public Subject getEnterpriseTerritorySubject() {
+		return enterpriseTerritorySubject;
+	}
+
+	public void setEnterpriseTerritorySubject(Subject enterpriseTerritorySubject) {
+		this.enterpriseTerritorySubject = enterpriseTerritorySubject;
+	}
+
+	public Subject getOwnerTerritorySubject() {
+		return ownerTerritorySubject;
+	}
+
+	public void setOwnerTerritorySubject(Subject ownerTerritorySubject) {
+		this.ownerTerritorySubject = ownerTerritorySubject;
 	}
 
 }

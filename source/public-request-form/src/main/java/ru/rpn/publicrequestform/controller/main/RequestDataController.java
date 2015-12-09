@@ -35,9 +35,12 @@ import ru.rpn.publicrequestform.errors.CaptchaException;
 import ru.rpn.publicrequestform.errors.FileSizeException;
 import ru.rpn.publicrequestform.model.RequestData;
 import ru.rpn.publicrequestform.model.RequestSubject;
+import ru.rpn.publicrequestform.model.Subject;
 import ru.rpn.publicrequestform.service.RequestDataService;
 import ru.rpn.publicrequestform.service.RequestSubjectService;
+import ru.rpn.publicrequestform.service.SubjectService;
 import ru.rpn.publicrequestform.util.bind.CustomRequestSubjectPropertyEditor;
+import ru.rpn.publicrequestform.util.bind.CustomSubjectPropertyEditor;
 
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -53,10 +56,16 @@ public class RequestDataController {
 	private RequestDataService requestDataService;
 	
 	@Autowired
+	private SubjectService subjectService;
+	
+	@Autowired
 	private RequestSubjectService requestSubjectService;
 	
 	@Autowired
 	private CustomRequestSubjectPropertyEditor customRequestSubjectPropertyEditor;
+	
+	@Autowired
+	private CustomSubjectPropertyEditor customSubjectPropertyEditor;
 	
 	@Autowired
 	private MessageSource messageSource;
@@ -64,6 +73,7 @@ public class RequestDataController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(RequestSubject.class, customRequestSubjectPropertyEditor);
+		binder.registerCustomEditor(Subject.class, customSubjectPropertyEditor);
 	}
 	
 	
@@ -76,6 +86,11 @@ public class RequestDataController {
 	@ModelAttribute("requestSubjects")
 	private List<RequestSubject> getRequestSubjects() {
 		return requestSubjectService.getAll();
+	}
+	
+	@ModelAttribute("subjects")
+	private List<Subject> getSubjects() {
+		return subjectService.getAll();
 	}
 	
 	@RenderMapping

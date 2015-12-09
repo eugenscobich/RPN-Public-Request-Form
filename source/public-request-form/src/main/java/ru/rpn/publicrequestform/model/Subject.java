@@ -6,14 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "prf_request_subject")
-public class RequestSubject implements Serializable {
+@Table(name = "prf_subject")
+public class Subject implements Serializable {
 
-	private static final long serialVersionUID = 5067722166807054249L;
+	private static final long serialVersionUID = -3741910161358032099L;
 
 	@Id
 	@GeneratedValue
@@ -21,12 +20,6 @@ public class RequestSubject implements Serializable {
 	
 	@Column
 	private String name;
-	
-	@Column
-	private String index;
-
-	@ManyToOne
-	private RequestSubjectDetail requestSubjectDetail;
 	
 	public Long getId() {
 		return id;
@@ -42,18 +35,6 @@ public class RequestSubject implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getIndex() {
-		return index;
-	}
-
-	public void setIndex(String index) {
-		this.index = index;
-	}
-	
-	public String getLabel() {
-		return index + " - " + name;
 	}
 
 	@Override
@@ -72,21 +53,13 @@ public class RequestSubject implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RequestSubject other = (RequestSubject) obj;
+		Subject other = (Subject) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	
-	public RequestSubjectDetail getRequestSubjectDetail() {
-		return requestSubjectDetail;
-	}
-
-	public void setRequestSubjectDetail(RequestSubjectDetail requestSubjectDetail) {
-		this.requestSubjectDetail = requestSubjectDetail;
 	}
 	
 }

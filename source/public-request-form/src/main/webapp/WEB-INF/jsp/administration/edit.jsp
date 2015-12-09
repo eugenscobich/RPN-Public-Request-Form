@@ -111,6 +111,25 @@
 				<span><c:out value="${requestData.middleName}"/></span>
 			</div>
 		</div>
+		
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Enterprise-Territory-Subject"/>:</label>
+			</div>
+			<div class="content">
+				<span><c:out value="${requestData.enterpriseTerritorySubject.name}"/></span>
+			</div>
+		</div>
+		
+		<div class="group">
+			<div class="title">
+				<label><spring:message code="Owner-Territory-Subject"/>:</label>
+			</div>
+			<div class="content">
+				<span><c:out value="${requestData.ownerTerritorySubject.name}"/></span>
+			</div>
+		</div>
+		
 		<div class="group">
 			<div class="title">
 				<label><spring:message code="Address"/>:</label>
