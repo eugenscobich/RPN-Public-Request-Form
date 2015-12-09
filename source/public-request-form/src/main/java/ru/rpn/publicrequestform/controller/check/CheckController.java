@@ -54,6 +54,7 @@ public class CheckController {
 	
 	@RenderMapping(params="view=result")
 	public String result(RenderRequest request, RenderResponse response, Model model, @RequestParam("id") String id, @RequestParam("requestSubjectIndex") String requestSubjectIndex) {
+		response.setContentType("text/html; charset=UTF-8");
 		RequestData requestData = null;
 		Long requestDataId = null;
 		try {
@@ -64,6 +65,11 @@ public class CheckController {
 		if (requestDataId != null) {
 			requestData = requestDataService.get(requestDataId);
 		}
+		
+		if (requestData == null) {
+			return "result";
+		}
+		
 		if (!requestData.getRequestSubject().getIndex().equalsIgnoreCase(requestSubjectIndex)) {
 			requestData = null;
 		}

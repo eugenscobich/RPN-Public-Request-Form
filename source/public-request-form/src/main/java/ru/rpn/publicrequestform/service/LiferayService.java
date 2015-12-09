@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +17,11 @@ import ru.rpn.publicrequestform.model.RequestData;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.User;
@@ -128,10 +133,16 @@ public class LiferayService {
 			StringPool.BLANK, new ByteArrayInputStream(bytes), bytes.length, new ServiceContext());
 		final long roleId = RoleLocalServiceUtil.getRole(companyId, ROLE_NAME).getRoleId();
 		List<ResourcePermission> rps = ResourcePermissionLocalServiceUtil.getResourcePermissions(companyId, ENTRY_RESOURCE_NAME, ResourceConstants.SCOPE_INDIVIDUAL, Long.toString(fileEntry.getPrimaryKey()));
-		if (rps != null && !rps.isEmpty()) {
+		if (rps != null && !rps.isEmpty()) {	
 			ResourcePermissionLocalServiceUtil.deleteResourcePermission(rps.get(0).getResourcePermissionId());
 		} 
 		ResourcePermissionLocalServiceUtil.setResourcePermissions(companyId, ENTRY_RESOURCE_NAME, ResourceConstants.SCOPE_INDIVIDUAL, Long.toString(fileEntry.getPrimaryKey()), roleId, ENTRY_ACTIONS);
+		/*
+		SearchEngineUtil.deleteDocument(companyId, fileEntry.getUuid());
+		Indexer indexer = IndexerRegistryUtil.getIndexer(DLFileEntry.class);
+		indexer.delete(fileEntry);
+		*/
+		DLFileEntryLocalServiceUtil.updateStatus(getUserId(companyId), fileEntry.getFileEntryId(), WorkflowConstants.STATUS_DRAFT, new ServiceContext());
 		return fileEntry.getFileEntryId();
 	}
 
@@ -140,6 +151,24 @@ public class LiferayService {
 		long groupId = CompanyLocalServiceUtil.getCompany(companyId).getGroup().getGroupId();
 		long parentFolderId = getFolderId(requestData, companyId, groupId);
 		DLFolderLocalServiceUtil.deleteFolder(parentFolderId);
+	}
+
+	public void fix(long companyId) throws Exception {
+		initiatePermissionCheckerIfNotStarted(companyId);
+		long groupId = CompanyLocalServiceUtil.getCompany(companyId).getGroup().getGroupId();
+		long parentFolderId = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
+		DLFolder dlFolder = DLFolderLocalServiceUtil.getFolder(groupId, parentFolderId, PUBLIC_REQUEST_FORM_PARENT_FOLDER_NAME);
+		List<DLFolder> dlFolders = DLFolderLocalServiceUtil.getFolders(groupId, getRepositoryId(groupId, dlFolder.getFolderId()));
+		
+		for (DLFolder dlFolder2 : dlFolders) {
+			List<DLFileEntry> dlFileEntries = DLFileEntryLocalServiceUtil.getFileEntries(groupId, getRepositoryId(groupId, dlFolder2.getFolderId()));
+			if (CollectionUtils.isNotEmpty(dlFileEntries)) {
+				for (DLFileEntry dlFileEntry : dlFileEntries) {
+					System.out.println(dlFileEntry.getTitle());
+					DLFileEntryLocalServiceUtil.updateStatus(getUserId(companyId), dlFileEntry.getFileEntryId(), WorkflowConstants.STATUS_DRAFT, new ServiceContext());	
+				}
+			}
+		}
 	}
 	
 }

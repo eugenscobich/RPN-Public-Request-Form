@@ -78,6 +78,10 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 	@Column
 	@Enumerated(EnumType.STRING)
 	private ResponseMethod responseMethod;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private SocialStatus socialStatus;
 	
 	@ManyToOne
 	private RequestSubject requestSubject;
@@ -342,6 +346,14 @@ public class RequestData implements Serializable, Comparable<RequestData> {
 
 	public void setInternalNumber(String internalNumber) {
 		this.internalNumber = internalNumber;
+	}
+
+	public SocialStatus getSocialStatus() {
+		return socialStatus;
+	}
+
+	public void setSocialStatus(SocialStatus socialStatus) {
+		this.socialStatus = socialStatus;
 	}
 
 }

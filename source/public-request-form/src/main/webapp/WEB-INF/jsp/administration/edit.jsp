@@ -138,6 +138,15 @@
 		
 		<div class="group">
 			<div class="title">
+				<label><spring:message code="Social-Status"/>:</label>
+			</div>
+			<div class="content">
+				<span><c:if test="${not empty requestData.socialStatus}"><spring:message code="SocialStatus.${requestData.socialStatus}"/></c:if></span>
+			</div>
+		</div>
+		
+		<div class="group">
+			<div class="title">
 				<label><spring:message code="Response-Method"/>:</label>
 			</div>
 			<div class="content">

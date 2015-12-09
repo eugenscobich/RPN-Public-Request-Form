@@ -29,6 +29,7 @@ import ru.rpn.publicrequestform.model.RequestSubject;
 import ru.rpn.publicrequestform.model.ResponseStatus;
 import ru.rpn.publicrequestform.model.Status;
 import ru.rpn.publicrequestform.service.DepartmentService;
+import ru.rpn.publicrequestform.service.LiferayService;
 import ru.rpn.publicrequestform.service.RequestDataService;
 import ru.rpn.publicrequestform.service.RequestSubjectService;
 import ru.rpn.publicrequestform.service.StatusService;
@@ -64,6 +65,9 @@ public class AdministrationController {
 	
 	@Autowired
 	private CustomDepartmentPropertyEditor customDepartmentPropertyEditor;
+	
+	@Autowired
+	private LiferayService liferayService;
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -283,4 +287,9 @@ public class AdministrationController {
 		return "view";
 	}
 	
+	
+	@ActionMapping("fix")
+	public void fix(ActionRequest request, ActionResponse response, Model model) throws Exception {
+		liferayService.fix(PortalUtil.getCompanyId(request));
+	}
 }

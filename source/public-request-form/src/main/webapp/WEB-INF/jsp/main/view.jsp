@@ -60,14 +60,24 @@
 					<form:input path="email" cssClass="input"/><form:errors path="email" cssClass="error"/>
 				</div>
 				
-
-
-				
 				<div class="title">
 					<form:label path="phone"><spring:message code="Phone"/></form:label>
 				</div>
 				<div class="content">
 					<form:input path="phone" cssClass="input"/><form:errors path="phone" cssClass="error"/>
+				</div>
+				<div class="title">
+					<form:label path="responseMethod"><spring:message code="Social-Status"/></form:label>
+				</div>
+				<div class="content">
+					<spring:eval expression="T(ru.rpn.publicrequestform.model.SocialStatus).values()" var="socialStatuses" />
+					<form:select path="socialStatus" cssClass="input">
+						<form:option value=""><spring:message code="Select-One"/></form:option>
+						<c:forEach items="${socialStatuses}" var="socialStatus">
+							<form:option value="${socialStatus}"><spring:message code="SocialStatus.${socialStatus}"/></form:option>
+						</c:forEach>
+					</form:select>
+					<form:errors path="socialStatus" cssClass="error"/>
 				</div>
 				<div class="title">
 					<form:label path="responseMethod"><spring:message code="Response-Method"/></form:label>
