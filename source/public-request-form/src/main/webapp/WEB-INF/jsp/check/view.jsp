@@ -11,15 +11,12 @@
 <div class="public-request-check-form">
 	<h1><spring:message code="Check-iformation-about-application"/></h1>
 	<div>
-		<c:forEach items="${requestSubjects}" var="requestSubject" varStatus="status">
-			<div>
-				<input type="radio" value="${requestSubject.index}" name="requestSubject"
-				id="requestSubject${requestSubject.id}" class="requestSubject" 
-				<c:if test="${status.index == 0}">checked="true"</c:if>>&nbsp;<label for="requestSubject${requestSubject.id}"><c:out 
-				value="${requestSubject.name}" /></label>
-				<br/>
-			</div>
-		</c:forEach>
+		<select class="requestSubject" name="requestSubject" style="margin-bottom: 20px;">
+			<c:forEach items="${requestSubjects}" var="requestSubject" varStatus="status" >
+				<option value="${requestSubject.index}" <c:if test="${status.index == 0}"> selected="selected"</c:if> ><c:out value="${requestSubject.name}" /></option>
+			</c:forEach>
+		</select>
+		<br>
 	</div>
 	<div>
 		<form action="${find}" method="post">
@@ -32,17 +29,17 @@
 	<script>	
 		$(document).ready(function(){
 			var form = $('.public-request-check-form form');
-			var requestSubject = $('.public-request-check-form input[name=requestSubject]');
+			var requestSubject = $('.public-request-check-form select[name=requestSubject]');
 			var year = '${year}';
 			requestSubject.change(function(){
 				var value = $(this).val();
 				$('.public-request-check-form .format').html("&nbsp;" + value + "-" + year + "/&nbsp;");
 			});
-			$('.public-request-check-form input[name=requestSubject][checked=true]').change();
+			$('.public-request-check-form select[name=requestSubject]').change();
 			
 			form.submit(function(){
 				var id = form.find('input[name=id]').val();
-				var requestSubjectIndex = $('.public-request-check-form input[name=requestSubject]:checked').val();
+				var requestSubjectIndex = $('.public-request-check-form select[name=requestSubject]').val();
 				if(id) {
 					$.ajax({
 						url: form.attr('action'),

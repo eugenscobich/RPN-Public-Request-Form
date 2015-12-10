@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.rpn.publicrequestform.dao.RequestSubjectDAO;
+import ru.rpn.publicrequestform.dao.RequestSubjectDetailDAO;
 import ru.rpn.publicrequestform.model.RequestSubject;
+import ru.rpn.publicrequestform.model.RequestSubjectDetail;
 import ru.rpn.publicrequestform.util.spring.PostInitialize;
 
 @Service
@@ -16,6 +18,12 @@ public class RequestSubjectService {
 	
 	@Autowired
 	private RequestSubjectDAO requestSubjectDAO;
+	
+	@Autowired
+	private RequestSubjectDetailService requestSubjectDetailService;
+	
+	@Autowired
+	private RequestSubjectDetailDAO requestSubjectDetailDAO;
 	
 	@Value("${initial.request.subjects}")
 	private String initialRequestSubject;
@@ -38,14 +46,31 @@ public class RequestSubjectService {
 		boolean check = true;
 		int i = 1;
 		for (String requestSubject : requestSubjects) {
-			if (check && requestSubjectDAO.get(requestSubject) != null) {
+			String[] requestSubjectsParts = requestSubject.split("=");	
+			String requestSubjectName = requestSubjectsParts[0];
+			
+			if (check && requestSubjectDAO.get(requestSubjectName) != null) {
 				break;
 			}
 			check = false;
 			RequestSubject rs = new RequestSubject();
 			rs.setIndex(String.format("%02d", i));
-			rs.setName(requestSubject);
+			rs.setName(requestSubjectName);
 			save(rs);
+			
+			
+			String[] requestSubjectsDeatils = requestSubjectsParts[1].split("\\|");
+			boolean check2 = true;
+			for (String requestSubjectsDeatil : requestSubjectsDeatils) {
+				if (check2 && requestSubjectDAO.get(requestSubjectsDeatil) != null) {
+					break;
+				}
+				check2 = false;
+				RequestSubject rsd = new RequestSubject();
+				rsd.setIndex(String.format("%02d", i));
+				rsd.setName(requestSubjectsDeatil);
+				save(rsd);
+			}
 			i++;
 		}
 	}

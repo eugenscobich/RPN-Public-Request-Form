@@ -24,9 +24,6 @@ public class RequestSubject implements Serializable {
 	
 	@Column
 	private String index;
-
-	@ManyToOne
-	private RequestSubjectDetail requestSubjectDetail;
 	
 	public Long getId() {
 		return id;
@@ -79,14 +76,6 @@ public class RequestSubject implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	
-	public RequestSubjectDetail getRequestSubjectDetail() {
-		return requestSubjectDetail;
-	}
-
-	public void setRequestSubjectDetail(RequestSubjectDetail requestSubjectDetail) {
-		this.requestSubjectDetail = requestSubjectDetail;
 	}
 	
 }

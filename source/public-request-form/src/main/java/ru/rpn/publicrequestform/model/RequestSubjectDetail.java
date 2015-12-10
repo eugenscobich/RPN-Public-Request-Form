@@ -10,8 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "prf_request_subject_detail")
+//@Entity
+//@Table(name = "prf_request_subject_detail")
 public class RequestSubjectDetail implements Serializable {
 
 	private static final long serialVersionUID = 5067722166807054249L;

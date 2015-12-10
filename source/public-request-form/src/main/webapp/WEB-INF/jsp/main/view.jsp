@@ -80,13 +80,15 @@
 				<div class="content">
 					<form:input path="email" cssClass="input"/><form:errors path="email" cssClass="error"/>
 				</div>
-				
-				<div class="title">
-					<form:label path="phone"><spring:message code="Phone"/></form:label>
+				<div class="group">
+					<div class="title">
+						<form:label path="phone"><spring:message code="Phone2"/></form:label>
+					</div>
+					<div class="content">
+						<form:input path="phone" cssClass="input"/><form:errors path="phone" cssClass="error"/>
+					</div>
 				</div>
-				<div class="content">
-					<form:input path="phone" cssClass="input"/><form:errors path="phone" cssClass="error"/>
-				</div>
+				<%--
 				<div class="title">
 					<form:label path="responseMethod"><spring:message code="Social-Status"/></form:label>
 				</div>
@@ -100,6 +102,7 @@
 					</form:select>
 					<form:errors path="socialStatus" cssClass="error"/>
 				</div>
+				 
 				<div class="title">
 					<form:label path="responseMethod"><spring:message code="Response-Method"/></form:label>
 				</div>
@@ -111,7 +114,7 @@
 						</c:forEach>
 					</form:select>
 					<form:errors path="responseMethod" cssClass="error"/>
-				</div>
+				</div>--%>
 				<div class="title">
 					<form:label path="requestSubject"><spring:message code="Request-Subject"/></form:label>
 				</div>
